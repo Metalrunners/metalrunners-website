@@ -340,7 +340,6 @@
     .team-photo-caption {
       display: none;
     }
-    /* VIDEO UPLOAD */
     .team-video-wrapper { width: 100%; max-width: 800px; aspect-ratio: 16/9; position: relative; }
     .team-video-wrapper video {
       width: 100%;
@@ -349,22 +348,25 @@
       border: 2px solid var(--border);
       box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 80px var(--accent-dim);
       background: var(--surface-2);
-      object-fit: cover;
       display: block;
     }
-    /* 音量控制条 - 嵌入視頻底部 */
+    /* 音量控制条 - 嵌入視頻底部，與視頻同寬 */
     #video-volume-control {
       display: flex;
       align-items: center;
       gap: 10px;
       padding: 10px 16px;
       position: absolute;
-      bottom: 4px;
-      left: 4px;
-      right: 4px;
+      bottom: 0;
+      left: 0;
+      right: 0;
       background: linear-gradient(transparent, rgba(0,0,0,0.7));
-      border-radius: 0 0 24px 24px;
+      border-radius: 0 0 28px 28px;
+      border-left: 2px solid var(--border);
+      border-right: 2px solid var(--border);
+      border-bottom: 2px solid var(--border);
       backdrop-filter: blur(8px);
+      box-sizing: border-box;
     }
 
     #video-volume {
@@ -975,6 +977,39 @@
     .funrun-section:not([data-edit="0"]) .funrun-delete-btn { display: flex !important; align-items: center; justify-content: center; }
     .funrun-delete-btn:hover { background: #ff0000; transform: scale(1.15); }
 
+    /* 排序模式 */
+    .funrun-card.sortable {
+      cursor: grab;
+    }
+    .funrun-card.sortable:active {
+      cursor: grabbing;
+    }
+    .funrun-card.dragging {
+      opacity: 0.5;
+      transform: scale(1.1) !important;
+      border-color: var(--accent) !important;
+      z-index: 1000;
+    }
+    .funrun-card.drag-over {
+      border-color: #4CAF50 !important;
+      border-style: dashed !important;
+    }
+    /* 排序提示文字 */
+    .funrun-sort-hint {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.9);
+      border: 2px solid var(--accent);
+      padding: 12px 24px;
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 14px;
+      z-index: 9999;
+      display: none;
+    }
+
     /* 左右箭嘴 */
     .funrun-arrow {
       position: absolute;
@@ -1047,7 +1082,7 @@
   </div>
 
   <!-- 簡化版登入按鈕（admin bar 隱藏時顯示） -->
-  <div id="admin-login-btn" style="position:fixed;top:10px;right:10px;z-index:9998;display:none;">
+  <div id="admin-login-btn" style="position:fixed;bottom:30px;left:30px;z-index:9998;display:none;">
     <button onclick="SMG.adminLogin()" style="background:rgba(245,166,35,0.9);color:#000;border:none;padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;">🔒 Admin</button>
   </div>
 
@@ -1294,8 +1329,17 @@
 
       <div class="funrun-edit-controls" id="funrun-edit-controls" style="display:none;margin-top:20px;text-align:center;">
         <button class="funrun-add-btn" id="funrun-add-btn" onclick="SMG.addFunRunPhoto()" style="padding:10px 24px;background:var(--accent);border:none;color:#000;border-radius:8px;cursor:pointer;font-weight:bold;margin-right:10px;">+ 新增相片</button>
+        <button class="funrun-sort-btn" id="funrun-sort-btn" onclick="SMG.toggleFunRunSortMode()" style="padding:10px 24px;background:rgba(255,255,255,0.1);border:1px solid var(--accent);color:var(--accent);border-radius:8px;cursor:pointer;margin-right:10px;">🔄 拖曳排序</button>
+        <button class="funrun-backup-btn" onclick="SMG.exportFunRunPhotos()" style="padding:10px 24px;background:rgba(33,150,243,0.15);border:1px solid #2196F3;color:#2196F3;border-radius:8px;cursor:pointer;margin-right:10px;">📥 備份</button>
+        <button class="funrun-restore-btn" onclick="document.getElementById('funrun-restore-file').click()" style="padding:10px 24px;background:rgba(255,152,0,0.15);border:1px solid #FF9800;color:#FF9800;border-radius:8px;cursor:pointer;margin-right:10px;">📤 恢復</button>
+        <button class="funrun-reset-github-btn" onclick="SMG.resetHiddenGitHubPhotos()" style="padding:10px 18px;background:rgba(156,39,176,0.15);border:1px solid #9C27B0;color:#9C27B0;border-radius:8px;cursor:pointer;margin-right:10px;font-size:13px;" title="重新顯示所有 GitHub 相片">🔄 重置 GitHub</button>
+        <button class="funrun-clear-btn" onclick="SMG.clearAllFunRunPhotos()" style="padding:10px 18px;background:rgba(255,0,0,0.15);border:1px solid #ff4444;color:#ff4444;border-radius:8px;cursor:pointer;margin-right:10px;font-size:13px;" title="清除所有本地相片">🗑️ 清除本地</button>
+        <input type="file" id="funrun-restore-file" accept=".json" style="display:none" onchange="SMG.importFunRunPhotos(this)">
         <button class="funrun-logout-btn" id="funrun-logout-btn" onclick="SMG.funRunAdminLogout()" style="padding:10px 24px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--text);border-radius:8px;cursor:pointer;">登出</button>
       </div>
+
+      <!-- 排序提示 -->
+      <div class="funrun-sort-hint" id="funrun-sort-hint">🔄 拖曳相片可調整順序，完成後按「💾 儲存順序」</div>
     </div>
   </section>
 
@@ -2038,6 +2082,7 @@
           self.setupPhotoResize();
           self.initUpcoming();
           self.initFunRun();
+          self.initFunRunDragDrop(); // 初始化拖曳排序
           // 自動讀取 backup 檔
           self.autoLoadBackup();
           self.showStatus('✅ 系統就緒');
@@ -2913,6 +2958,8 @@
     // =============================================
     SMG.isFunRunAdmin = false;
     SMG.funRunEditMode = false;
+    SMG.funRunSortMode = false;
+    SMG.funRunPhotoOrder = [];
     SMG.funRunPaused = false;
     SMG.funRunPos = 0;
     SMG.funRunInterval = null;
@@ -3006,47 +3053,123 @@
 
     SMG.loadFunRunPhotos = function() {
       var self = this;
+      var carousel = document.getElementById('funrun-carousel');
+      if (!carousel) return;
+
+      // 清空並重新渲染
+      carousel.innerHTML = '';
+
+      // GitHub 預設相片列表
+      var githubPhotos = [
+        'Photo%20from%20%F0%9F%92%96%F0%9F%92%96%F0%9F%8C%B8(46).jpg',
+        'Photo%20from%20%F0%9F%92%96%F0%9F%92%96%F0%9F%8C%B8(47).jpg',
+        'Photo%20from%20%F0%9F%92%96%F0%9F%92%96%F0%9F%8C%B8(54).jpg',
+        'Photo%20from%20%F0%9F%92%96%F0%9F%92%96%F0%9F%8C%B8(62).jpg',
+        'Photo%20from%20%F0%9F%92%96%F0%9F%92%96%F0%9F%8C%B8(63).jpg'
+      ];
+      var baseUrl = 'https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/';
+
+      // 從 IndexedDB 讀取用戶上傳的相片
       this.dbGetAll(function(allData) {
-        var photos = [];
+        var allPhotosMap = {};
+        var photoId = 0;
+
+        // 加入 GitHub 相片（ID: g_0 到 g_4）
+        githubPhotos.forEach(function(filename) {
+          var id = 'g_' + photoId;
+          allPhotosMap[id] = {
+            id: id,
+            src: baseUrl + filename,
+            source: 'github'
+          };
+          photoId++;
+        });
+
+        // 加入 IndexedDB 相片
         Object.keys(allData).forEach(function(key) {
-          if (key.startsWith('funrun_photo_')) {
-            var match = key.match(/funrun_photo_(\d+)/);
-            if (match) {
-              photos.push({ id: parseInt(match[1]), data: allData[key] });
-            }
+          if (key.startsWith('funrun_photo_db_')) {
+            allPhotosMap[key] = {
+              id: key,
+              src: allData[key],
+              source: 'db'
+            };
           }
         });
 
-        // 按 ID 排序
-        photos.sort(function(a, b) { return a.id - b.id; });
+        // 讀取保存的排序順序
+        var savedOrder = null;
+        if (allData['funrun_photo_order']) {
+          try {
+            savedOrder = JSON.parse(allData['funrun_photo_order']);
+          } catch(e) {
+            savedOrder = null;
+          }
+        }
 
-        var carousel = document.getElementById('funrun-carousel');
-        if (!carousel) return;
+        // 讀取隱藏的 GitHub 相片列表
+        var hiddenGitHub = [];
+        if (allData['funrun_hidden_github']) {
+          try {
+            hiddenGitHub = JSON.parse(allData['funrun_hidden_github']);
+          } catch(e) {
+            hiddenGitHub = [];
+          }
+        }
 
-        // 清空並重新渲染
-        carousel.innerHTML = '';
+        // 按順序排列相片
+        var allPhotos = [];
+        if (savedOrder && savedOrder.length > 0) {
+          // 使用保存的順序
+          savedOrder.forEach(function(id) {
+            if (allPhotosMap[id]) {
+              allPhotos.push(allPhotosMap[id]);
+              delete allPhotosMap[id]; // 移除已加入的
+            }
+          });
+          // 加入剩餘未排序的相片
+          Object.keys(allPhotosMap).forEach(function(id) {
+            if (id !== 'funrun_photo_order' && id !== 'funrun_hidden_github') {
+              allPhotos.push(allPhotosMap[id]);
+            }
+          });
+        } else {
+          // 預設順序：GitHub 相片在前，本地相片在後
+          Object.keys(allPhotosMap).forEach(function(id) {
+            if (id !== 'funrun_photo_order' && id !== 'funrun_hidden_github') {
+              allPhotos.push(allPhotosMap[id]);
+            }
+          });
+        }
 
-        if (photos.length === 0) {
+        if (allPhotos.length === 0) {
           carousel.innerHTML = '<p style="color:var(--text-muted);text-align:center;width:100%;">暫時未有相片，請管理員新增 📷</p>';
           return;
         }
 
         // 創建所有相片卡片
-        photos.forEach(function(photo) {
+        var visibleCount = 0;
+        allPhotos.forEach(function(photo, index) {
+          // 跳過已隱藏的 GitHub 相片
+          if (photo.source === 'github' && hiddenGitHub.indexOf(photo.id) !== -1) {
+            return;
+          }
+
           var card = document.createElement('div');
           card.className = 'funrun-card';
           card.setAttribute('data-id', photo.id);
+          card.setAttribute('data-source', photo.source);
 
           var deleteBtn = '';
           if (self.funRunEditMode) {
-            deleteBtn = '<button class="funrun-delete-btn" onclick="SMG.deleteFunRunPhoto(' + photo.id + ', event)">✕</button>';
+            deleteBtn = '<button class="funrun-delete-btn" onclick="SMG.deleteFunRunPhoto(\'' + photo.id + '\', event)">✕</button>';
           }
 
           card.innerHTML =
-            '<img src="' + photo.data + '" alt="Fun Run 相片">' +
+            '<img src="' + photo.src + '" alt="Fun Run 相片" loading="lazy" onerror="this.style.display=\'none\'">' +
             '<div class="funrun-overlay">📷 Fun Run</div>' +
             deleteBtn;
           carousel.appendChild(card);
+          visibleCount++;
         });
 
         // 為了無限輪播，克隆前半嘅相片加到尾巴
@@ -3054,8 +3177,14 @@
         var cloneCount = Math.min(cards.length, 6);
         for (var i = 0; i < cloneCount; i++) {
           var clone = cards[i].cloneNode(true);
+          // 克隆的卡片唔需要刪除按鈕
+          var delBtn = clone.querySelector('.funrun-delete-btn');
+          if (delBtn) delBtn.remove();
           carousel.appendChild(clone);
         }
+
+        // 保存 visibleCount 以便後續使用
+        self._funRunVisibleCount = visibleCount;
 
         // 設置輪播寬度同初始位置
         carousel.style.transform = 'translateX(0px)';
@@ -3098,8 +3227,8 @@
         self2.dbGetAll(function(all) {
           var maxId = 0;
           Object.keys(all).forEach(function(key) {
-            if (key.startsWith('funrun_photo_')) {
-              var m = key.match(/funrun_photo_(\d+)/);
+            if (key.startsWith('funrun_photo_db_')) {
+              var m = key.match(/funrun_photo_db_(\d+)/);
               if (m) maxId = Math.max(maxId, parseInt(m[1]));
             }
           });
@@ -3132,7 +3261,8 @@
                 var compressed = canvas.toDataURL('image/jpeg', 0.8);
 
                 maxId++;
-                self2.dbSet('funrun_photo_' + maxId, compressed, function() {
+                // 使用 db_ 前綴區分本地相片
+                self2.dbSet('funrun_photo_db_' + maxId, compressed, function() {
                   processNextFile(index + 1);
                 });
               };
@@ -3204,16 +3334,268 @@
     SMG.deleteFunRunPhoto = function(id, event) {
       if (event) event.stopPropagation();
       var self = this;
-      if (!confirm('確定刪除呢張相片？')) return;
+      
+      // 檢查是 GitHub 相片還是本地相片
+      if (id.startsWith('g_')) {
+        // GitHub 相片：保存到隱藏列表並重新載入
+        if (!confirm('呢張相片來自 GitHub，只能從顯示中移除。\n確定要移除嗎？')) return;
+        var self2 = this;
+        this.dbGetAll(function(allData) {
+          var hiddenGitHub = [];
+          if (allData['funrun_hidden_github']) {
+            try {
+              hiddenGitHub = JSON.parse(allData['funrun_hidden_github']);
+            } catch(e) {
+              hiddenGitHub = [];
+            }
+          }
+          // 加入到隱藏列表
+          if (hiddenGitHub.indexOf(id) === -1) {
+            hiddenGitHub.push(id);
+          }
+          // 保存到 IndexedDB
+          self2.dbSet('funrun_hidden_github', JSON.stringify(hiddenGitHub), function() {
+            self2.showStatus('✅ 相片已從輪播移除');
+            self2.loadFunRunPhotos();
+          });
+        });
+      } else {
+        // IndexedDB 相片：真正刪除
+        if (!confirm('確定刪除呢張相片？')) return;
+        this.dbDelete(id, function(success) {
+          if (success) {
+            self.showStatus('✅ 相片已刪除');
+            self.loadFunRunPhotos();
+          } else {
+            self.showStatus('❌ 刪除失敗，請重試');
+          }
+        });
+      }
+    };
 
-      // 真正從 IndexedDB 刪除
-      this.dbDelete('funrun_photo_' + id, function(success) {
-        if (success) {
-          self.showStatus('✅ 相片已刪除');
-          self.loadFunRunPhotos();
-        } else {
-          self.showStatus('❌ 刪除失敗，請重試');
+    // ========== 備份/恢復功能 ==========
+
+    // 導出 Fun Run 相片（只導出本地相片）
+    SMG.exportFunRunPhotos = function() {
+      var self = this;
+      this.dbGetAll(function(allData) {
+        var funrunPhotos = {};
+        Object.keys(allData).forEach(function(key) {
+          if (key.startsWith('funrun_photo_db_')) {
+            funrunPhotos[key] = allData[key];
+          }
+        });
+
+        // 同時保存排序順序
+        funrunPhotos['_funrun_order'] = self.funRunPhotoOrder || [];
+
+        var json = JSON.stringify(funrunPhotos, null, 2);
+        var blob = new Blob([json], { type: 'application/json' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'steel-mag-funrun-backup-' + new Date().toISOString().slice(0,10) + '.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        self.showStatus('✅ 已備份 ' + Object.keys(funrunPhotos).length + ' 項（含排序）');
+      });
+    };
+
+    // 導入 Fun Run 相片
+    SMG.importFunRunPhotos = function(input) {
+      var file = input.files[0];
+      if (!file) return;
+
+      var self = this;
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          var data = JSON.parse(e.target.result);
+          var count = 0;
+          var total = Object.keys(data).length;
+
+          for (var key in data) {
+            self.dbSet(key, data[key], function() {
+              count++;
+              if (count === total) {
+                // 恢復排序順序
+                if (data['_funrun_order']) {
+                  self.funRunPhotoOrder = data['_funrun_order'];
+                  self.dbSet('funrun_photo_order', JSON.stringify(data['_funrun_order']), function() {});
+                }
+                self.showStatus('✅ 已恢復 ' + total + ' 項，頁面將重新整理…');
+                setTimeout(function() { self.loadFunRunPhotos(); }, 800);
+              }
+            });
+          }
+          input.value = '';
+        } catch(err) {
+          alert('❌ 恢復失敗：' + err.message);
         }
+      };
+      reader.readAsText(file);
+    };
+
+    // ========== 拖曳排序功能 ==========
+
+    // 排序模式開關
+    SMG.toggleFunRunSortMode = function() {
+      var self = this;
+      var carousel = document.getElementById('funrun-carousel');
+      var hint = document.getElementById('funrun-sort-hint');
+      var btn = document.getElementById('funrun-sort-btn');
+
+      if (!this.funRunSortMode) {
+        // 進入排序模式
+        this.funRunSortMode = true;
+        carousel.querySelectorAll('.funrun-card').forEach(function(card) {
+          // 只允許拖曳本地相片（db_ 前綴）
+          if (card.getAttribute('data-id').startsWith('db_')) {
+            card.classList.add('sortable');
+          }
+        });
+        hint.style.display = 'block';
+        btn.textContent = '💾 儲存順序';
+        btn.style.background = 'var(--accent)';
+        btn.style.color = '#000';
+        btn.onclick = function() { self.saveFunRunPhotoOrder(); };
+        this.showStatus('🔄 拖曳相片調整順序');
+      } else {
+        // 已經喺排序模式 - 儲存並退出
+        this.saveFunRunPhotoOrder();
+      }
+    };
+
+    // 儲存排序順序
+    SMG.saveFunRunPhotoOrder = function() {
+      var self = this;
+      var carousel = document.getElementById('funrun-carousel');
+      var cards = carousel.querySelectorAll('.funrun-card[data-id]');
+      var order = [];
+
+      cards.forEach(function(card) {
+        var id = card.getAttribute('data-id');
+        // 只保存本地相片同未移除的 GitHub 相片
+        if (id.startsWith('db_') || (id.startsWith('g_') && card.style.display !== 'none')) {
+          order.push(id);
+        }
+      });
+
+      // 保存到 IndexedDB
+      this.dbSet('funrun_photo_order', JSON.stringify(order), function() {
+        self.funRunPhotoOrder = order;
+        self.showStatus('✅ 排序已儲存');
+        self.exitFunRunSortMode();
+      });
+    };
+
+    // 退出排序模式
+    SMG.exitFunRunSortMode = function() {
+      var self = this;
+      var carousel = document.getElementById('funrun-carousel');
+      var hint = document.getElementById('funrun-sort-hint');
+      var btn = document.getElementById('funrun-sort-btn');
+
+      this.funRunSortMode = false;
+      carousel.querySelectorAll('.funrun-card').forEach(function(card) {
+        card.classList.remove('sortable', 'dragging', 'drag-over');
+      });
+      hint.style.display = 'none';
+      btn.textContent = '🔄 拖曳排序';
+      btn.style.background = 'rgba(255,255,255,0.1)';
+      btn.style.color = 'var(--accent)';
+      btn.onclick = function() { self.toggleFunRunSortMode(); };
+    };
+
+    // 初始化拖曳功能
+    SMG.initFunRunDragDrop = function() {
+      var self = this;
+      var draggedItem = null;
+
+      document.addEventListener('DOMNodeInserted', function() {
+        if (self.funRunSortMode) {
+          var carousel = document.getElementById('funrun-carousel');
+          carousel.querySelectorAll('.funrun-card.sortable').forEach(function(card) {
+            if (!card.hasDragListeners) {
+              card.hasDragListeners = true;
+
+              card.addEventListener('mousedown', function(e) {
+                if (e.button !== 0) return;
+                draggedItem = card;
+                card.classList.add('dragging');
+                e.preventDefault();
+              });
+            }
+          });
+        }
+      }, true);
+
+      document.addEventListener('mouseup', function(e) {
+        if (draggedItem) {
+          draggedItem.classList.remove('dragging');
+          draggedItem = null;
+        }
+      });
+
+      document.addEventListener('mousemove', function(e) {
+        if (!draggedItem) return;
+        var carousel = document.getElementById('funrun-carousel');
+        var cards = Array.from(carousel.querySelectorAll('.funrun-card:not(.dragging)'));
+
+        cards.forEach(function(card) {
+          var rect = card.getBoundingClientRect();
+          if (e.clientX > rect.left && e.clientX < rect.right &&
+              e.clientY > rect.top && e.clientY < rect.bottom) {
+            card.classList.add('drag-over');
+            // 交換位置
+            var draggedIdx = Array.from(carousel.children).indexOf(draggedItem);
+            var targetIdx = Array.from(carousel.children).indexOf(card);
+            if (draggedIdx !== targetIdx) {
+              if (draggedIdx < targetIdx) {
+                carousel.insertBefore(draggedItem, card.nextSibling);
+              } else {
+                carousel.insertBefore(draggedItem, card);
+              }
+            }
+          } else {
+            card.classList.remove('drag-over');
+          }
+        });
+      });
+    };
+
+    // 清理舊的 orphan 資料（同「清除所有本地相片」功能）
+    SMG.clearAllFunRunPhotos = function() {
+      if (!confirm('⚠️ 確定要清除所有本地相片嗎？\n呢個操作唔可以撤消！')) return;
+      var self = this;
+      this.dbGetAll(function(allData) {
+        var count = 0;
+        var total = 0;
+        Object.keys(allData).forEach(function(key) {
+          if (key.startsWith('funrun_photo_db_')) {
+            total++;
+            self.dbDelete(key, function() {
+              count++;
+              if (count === total) {
+                self.dbDelete('funrun_photo_order', function() {
+                  self.showStatus('✅ 已清除 ' + total + ' 張相片');
+                  self.loadFunRunPhotos();
+                });
+              }
+            });
+          }
+        });
+        if (total === 0) {
+          self.showStatus('✅ 冇本地相片需要清除');
+        }
+      });
+    };
+
+    // 清除已移除的 GitHub 相片殘留（重置顯示）
+    SMG.resetHiddenGitHubPhotos = function() {
+      this.dbSet('funrun_hidden_github', JSON.stringify([]), function() {
+        SMG.showStatus('✅ 已重置 GitHub 相片顯示');
+        SMG.loadFunRunPhotos();
       });
     };
 

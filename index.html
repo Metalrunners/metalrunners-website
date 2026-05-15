@@ -44,7 +44,7 @@
     }
     .nav-logo { display: flex; align-items: center; gap: 14px; }
     .nav-logo-img {
-      height: 50px; width: 50px;
+      height: 80px; width: 80px;
       object-fit: contain;
       border-radius: 50%;
       padding: 4px;
@@ -53,7 +53,7 @@
       animation: logoGradient 4s ease infinite;
       box-shadow:
         0 0 0 2px rgba(245,166,35,0.3),
-        0 0 15px rgba(245,166,35,0.4),
+        0 0 20px rgba(245,166,35,0.5),
         0 4px 12px rgba(0,0,0,0.4);
       transition: transform 0.4s ease, box-shadow 0.4s ease;
     }
@@ -141,7 +141,8 @@
     .team-photo-wrapper img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      background: #000;
     }
     .team-photo-placeholder {
       width: 100%;
@@ -252,6 +253,103 @@
       text-shadow: 0 1px 3px rgba(0,0,0,0.5);
     }
 
+    /* ADMIN BAR */
+    .admin-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 200;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      cursor: pointer;
+      font-size: 24px;
+      box-shadow: 0 4px 20px rgba(245,166,35,0.5);
+      transition: all 0.3s;
+    }
+    .admin-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 30px rgba(245,166,35,0.7);
+    }
+    .admin-panel {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      z-index: 200;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      min-width: 280px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+    .admin-panel.active { display: block; }
+    .admin-panel h3 {
+      font-size: 16px;
+      margin-bottom: 16px;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .admin-login {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .admin-login input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+    }
+    .admin-login button {
+      padding: 8px 16px;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      color: #000;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .admin-actions {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .admin-actions.show { display: flex; }
+    .admin-actions button {
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-2);
+      color: var(--text);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .admin-actions button:hover {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+    .admin-status {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 12px;
+      text-align: center;
+    }
+    .admin-status.success { color: #4cd964; }
+
     /* 響應式 */
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
@@ -264,10 +362,31 @@
       .hero-media-wrapper { max-width: 350px; }
       .team-photo-wrapper, .team-video-wrapper { max-width: 350px; border-radius: 16px; }
       #video-volume-control { border-radius: 0 0 16px 16px; }
+      .admin-panel { right: 10px; min-width: 260px; }
     }
   </style>
 </head>
 <body>
+
+  <!-- ADMIN BAR -->
+  <button class="admin-btn" id="admin-btn" title="Admin">⚙️</button>
+  <div class="admin-panel" id="admin-panel">
+    <h3>🔧 Admin Panel</h3>
+    <div class="admin-login" id="admin-login">
+      <input type="password" id="admin-password" placeholder="輸入密碼...">
+      <button onclick="adminLogin()">登入</button>
+    </div>
+    <div class="admin-actions" id="admin-actions">
+      <button onclick="uploadPhoto()">📷 上傳團體相</button>
+      <button onclick="uploadVideo()">🎬 上傳團體影片</button>
+      <button onclick="downloadBackup()">📥 下載備份</button>
+      <button onclick="restoreBackup()">📤 恢復備份</button>
+      <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)">
+      <input type="file" id="video-input" accept="video/*" style="display:none" onchange="handleVideoUpload(this)">
+      <input type="file" id="backup-input" accept=".json" style="display:none" onchange="handleRestore(this)">
+    </div>
+    <div class="admin-status" id="admin-status"></div>
+  </div>
 
   <!-- NAV -->
   <nav>
@@ -317,6 +436,131 @@
   </section>
 
   <script>
+    // Admin Panel
+    const ADMIN_PASS = 'smg2026';
+    const STORAGE_KEY = 'smg_';
+    let isAdmin = false;
+
+    document.getElementById('admin-btn').addEventListener('click', function() {
+      document.getElementById('admin-panel').classList.toggle('active');
+    });
+
+    function adminLogin() {
+      const pass = document.getElementById('admin-password').value;
+      if (pass === ADMIN_PASS) {
+        isAdmin = true;
+        document.getElementById('admin-login').style.display = 'none';
+        document.getElementById('admin-actions').classList.add('show');
+        showStatus('登入成功！', true);
+      } else {
+        showStatus('密碼錯誤', false);
+      }
+    }
+
+    function showStatus(msg, success) {
+      const el = document.getElementById('admin-status');
+      el.textContent = msg;
+      el.className = 'admin-status ' + (success ? 'success' : '');
+      setTimeout(() => { el.textContent = ''; }, 3000);
+    }
+
+    function uploadPhoto() {
+      document.getElementById('photo-input').click();
+    }
+
+    function uploadVideo() {
+      document.getElementById('video-input').click();
+    }
+
+    function handlePhotoUpload(input) {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('team-photo').src = e.target.result;
+          localStorage.setItem(STORAGE_KEY + 'team-photo', e.target.result);
+          showStatus('團體相已更新！', true);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handleVideoUpload(input) {
+      const file = input.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        const video = document.getElementById('team-video');
+        video.src = url;
+        video.play();
+        document.getElementById('team-video-placeholder').style.display = 'none';
+        video.style.display = 'block';
+        localStorage.setItem(STORAGE_KEY + 'team-video', url);
+        showStatus('團體影片已更新！', true);
+      }
+    }
+
+    function downloadBackup() {
+      const backup = {
+        teamPhoto: localStorage.getItem(STORAGE_KEY + 'team-photo'),
+        teamVideo: localStorage.getItem(STORAGE_KEY + 'team-video')
+      };
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'steel-mag-backup-' + new Date().toISOString().slice(0,10) + '.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      showStatus('備份已下載！', true);
+    }
+
+    function restoreBackup() {
+      document.getElementById('backup-input').click();
+    }
+
+    function handleRestore(input) {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const backup = JSON.parse(e.target.result);
+            if (backup.teamPhoto) {
+              document.getElementById('team-photo').src = backup.teamPhoto;
+              localStorage.setItem(STORAGE_KEY + 'team-photo', backup.teamPhoto);
+            }
+            if (backup.teamVideo) {
+              const video = document.getElementById('team-video');
+              video.src = backup.teamVideo;
+              video.play();
+              document.getElementById('team-video-placeholder').style.display = 'none';
+              video.style.display = 'block';
+              localStorage.setItem(STORAGE_KEY + 'team-video', backup.teamVideo);
+            }
+            showStatus('備份已恢復！', true);
+          } catch (err) {
+            showStatus('恢復失敗', false);
+          }
+        };
+        reader.readAsText(file);
+      }
+    }
+
+    // 初始化 - 載入已保存的相片和影片
+    window.addEventListener('DOMContentLoaded', function() {
+      const savedPhoto = localStorage.getItem(STORAGE_KEY + 'team-photo');
+      const savedVideo = localStorage.getItem(STORAGE_KEY + 'team-video');
+      if (savedPhoto) {
+        document.getElementById('team-photo').src = savedPhoto;
+      }
+      if (savedVideo) {
+        const video = document.getElementById('team-video');
+        video.src = savedVideo;
+        document.getElementById('team-video-placeholder').style.display = 'none';
+        video.style.display = 'block';
+      }
+    });
+
     // 影片控制
     const video = document.getElementById('team-video');
     const volumeSlider = document.getElementById('video-volume');
@@ -360,23 +604,6 @@
         volumeIcon.textContent = '🔊';
       }
     }
-
-    // 點擊 placeholder 上傳影片
-    videoPlaceholder.addEventListener('click', function() {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'video/*';
-      input.onchange = function(e) {
-        const file = e.target.files[0];
-        if (file) {
-          const url = URL.createObjectURL(file);
-          video.src = url;
-          videoPlaceholder.style.display = 'none';
-          video.style.display = 'block';
-        }
-      };
-      input.click();
-    });
 
     // 當影片載入完成後，隱藏 placeholder
     video.addEventListener('loadeddata', function() {

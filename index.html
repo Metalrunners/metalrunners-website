@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
@@ -6,6 +6,7 @@
   <title>鋼鐵鎂 Steel Mag — 跑友會</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap');
+
     :root {
       --bg: #0c0c0e;
       --surface: #141416;
@@ -18,361 +19,3816 @@
       --accent-glow: rgba(245,166,35,0.4);
       --card-radius: 20px;
     }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', sans-serif; overflow-x: hidden; }
-    /* Nav */
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(20px); background: rgba(12,12,14,0.8); }
-    .nav-logo { display: flex; align-items: center; gap: 12px; font-weight: 900; font-size: 20px; }
-    .nav-logo img { height: 40px; border-radius: 8px; }
-    .nav-links { display: flex; gap: 32px; }
-    .nav-links a { color: var(--text-muted); text-decoration: none; font-weight: 500; transition: color 0.3s; }
-    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
-    /* Hero */
-    .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding-top: 80px; }
-    .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #0c0c0e 0%, #1a1a2e 100%); }
-    .hero-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, var(--accent-glow) 0%, transparent 60%); opacity: 0.3; }
-    .hero-content { position: relative; text-align: center; padding: 40px; }
-    .hero-title { font-size: clamp(80px, 15vw, 200px); font-weight: 900; line-height: 0.9; margin-bottom: 24px; }
-    .hero-title span { display: inline-block; background: linear-gradient(135deg, var(--accent) 0%, #ff6b35 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero-sub { font-size: 18px; color: var(--text-muted); margin-bottom: 16px; }
-    .hero-badge { display: inline-block; padding: 8px 24px; background: var(--accent-dim); border: 1px solid var(--accent); border-radius: 100px; font-size: 14px; color: var(--accent); }
-    /* Sections */
-    section { padding: 120px 40px; max-width: 1200px; margin: 0 auto; }
-    .section-label { font-size: 12px; letter-spacing: 4px; color: var(--accent); margin-bottom: 16px; }
-    .section-title { font-size: 48px; font-weight: 900; margin-bottom: 48px; }
-    /* About */
-    .about-text { max-width: 800px; font-size: 18px; line-height: 1.8; color: var(--text-muted); }
-    /* Team Grid */
-    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-    .member-card { background: var(--surface); border-radius: var(--card-radius); padding: 32px; text-align: center; border: 1px solid var(--border); transition: all 0.3s; }
-    .member-card:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(245,166,35,0.1); }
-    .member-avatar { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 3px solid var(--accent); }
-    .member-logo { width: 60px; height: 60px; margin-bottom: 12px; }
-    .member-name { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-    .member-title { font-size: 14px; color: var(--accent); margin-bottom: 16px; }
-    .member-tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-    .member-tag { padding: 4px 12px; background: var(--surface-2); border-radius: 100px; font-size: 12px; color: var(--text-muted); }
-    /* Journal */
-    .journal-list { display: flex; flex-direction: column; gap: 32px; }
-    .journal-card { background: var(--surface); border-radius: var(--card-radius); padding: 32px; border: 1px solid var(--border); }
-    .journal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-    .journal-title { font-size: 20px; font-weight: 700; }
-    .journal-meta { font-size: 14px; color: var(--text-muted); display: flex; gap: 16px; }
-    .journal-desc { color: var(--text-muted); line-height: 1.6; }
-    /* Fun Run Carousel */
-    .funrun-carousel { position: relative; height: 400px; border-radius: var(--card-radius); overflow: hidden; background: var(--surface); }
-    .funrun-card { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
-    .funrun-card img { max-width: 100%; max-height: 100%; object-fit: contain; }
-    .funrun-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; background: rgba(0,0,0,0.5); border: none; border-radius: 50%; color: white; font-size: 24px; cursor: pointer; z-index: 10; }
-    .funrun-nav.prev { left: 20px; }
-    .funrun-nav.next { right: 20px; }
-    .funrun-dots { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
-    .funrun-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.3); cursor: pointer; }
-    .funrun-dot.active { background: var(--accent); }
-    /* Team Photo */
-    .team-photo-section { text-align: center; }
-    .team-photo { max-width: 100%; border-radius: var(--card-radius); margin-bottom: 24px; }
-    .team-caption { color: var(--text-muted); font-size: 18px; }
-    /* Video */
-    .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: var(--card-radius); }
-    .video-container video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-    /* Footer */
-    footer { padding: 60px 40px; text-align: center; border-top: 1px solid var(--border); }
-    .footer-brand { font-size: 24px; font-weight: 900; color: var(--accent); margin-bottom: 16px; }
-    .footer-slogan { color: var(--text-muted); margin-bottom: 8px; }
-    /* Loading */
-    .loading { display: flex; align-items: center; justify-content: center; min-height: 200px; color: var(--text-muted); }
-    /* Responsive */
-    @media (max-width: 768px) {
-      section { padding: 80px 20px; }
-      .hero-title { font-size: 60px; }
-      .nav-links { display: none; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans TC', sans-serif;
+      overflow-x: hidden;
     }
+
+    /* 浮動按鈕組 */
+    #float-btn-group {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 99;
+      display: none;
+    }
+    #back-to-top,
+    #back-to-journal {
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 2px solid var(--accent);
+      background: var(--surface-2);
+      color: var(--accent);
+      font-weight: bold;
+      font-size: 13px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      white-space: nowrap;
+    }
+    #back-to-top:hover,
+    #back-to-journal:hover {
+      background: var(--accent);
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    /* ADMIN BAR — 左上角 */
+    #admin-bar {
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 9999;
+      background: linear-gradient(135deg, #1a1a1a 0%, #222 100%);
+      border-right: 3px solid var(--accent);
+      border-bottom: 3px solid var(--accent);
+      border-radius: 0 0 12px 0;
+      padding: 10px 14px;
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      box-shadow: 4px 4px 20px rgba(0,0,0,0.5);
+      min-width: 160px;
+      max-width: 220px;
+    }
+    #admin-bar.visible {
+      display: flex;
+    }
+    #admin-bar .logo-badge {
+      background: var(--accent);
+      color: #000;
+      font-weight: 900;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+    #admin-bar .hint {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    #admin-bar .hint span { color: var(--accent); font-weight: 700; }
+    #admin-bar button {
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    #admin-bar button:hover { background: #388E3C; }
+    #admin-bar button.blue { background: #2196F3; }
+    #admin-bar button.blue:hover { background: #1976D2; }
+    #admin-bar button.orange { background: #FF9800; }
+    #admin-bar button.orange:hover { background: #F57C00; }
+    #admin-bar button:last-of-type:not(.status *) { background: #9C27B0; }
+    #admin-bar button:last-of-type:not(.status *):hover { background: #7B1FA2; }
+    #admin-bar .status {
+      font-size: 12px;
+      color: #4CAF50;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    /* Admin bar 內部按鈕直排 */
+    #admin-bar .logo-badge {
+      align-self: flex-start;
+    }
+    #admin-bar .hint {
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    /* 可編輯元素 */
+    .editable {
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s;
+      padding: 4px;
+    }
+    .editable:hover {
+      background: rgba(245,166,35,0.15);
+      box-shadow: 0 0 0 2px rgba(245,166,35,0.4);
+    }
+    .editable.editing {
+      background: rgba(245,166,35,0.2) !important;
+    }
+
+    /* 圖片可點擊 */
+    .img-clickable {
+      cursor: pointer;
+      transition: all 0.3s;
+      transform-origin: center center;
+    }
+    .img-clickable:hover {
+      box-shadow: 0 0 0 4px var(--accent), 0 0 30px var(--accent-glow) !important;
+    }
+    /* 圖片編輯模式 */
+    .img-clickable.drag-mode {
+      cursor: move;
+      z-index: 100;
+    }
+    .img-clickable.drag-mode:hover {
+      box-shadow: 0 0 0 4px #fff, 0 0 30px rgba(255,255,255,0.5) !important;
+    }
+    /* Emoji Reactions */
+    .emoji-reactions {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .emoji-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .emoji-btn:hover {
+      background: rgba(245,166,35,0.3);
+      border-color: var(--accent);
+      transform: scale(1.15);
+    }
+    .emoji-btn.active {
+      background: rgba(245,166,35,0.4);
+      border-color: var(--accent);
+    }
+    .emoji-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: bold;
+    }
+
+    /* NAV */
+    nav {
+      position: relative;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 40px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(12,12,14,0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 14px; }
+    .nav-logo-img {
+      height: 160px; width: 160px;
+      object-fit: contain;
+      border-radius: 50%;
+      padding: 6px;
+      background: linear-gradient(135deg, #f5a623, #ffcc00, #f5a623, #ff8800);
+      background-size: 300% 300%;
+      animation: logoGradient 4s ease infinite;
+      box-shadow:
+        0 0 0 3px rgba(245,166,35,0.3),
+        0 0 30px rgba(245,166,35,0.5),
+        0 0 60px rgba(245,166,35,0.3),
+        0 8px 32px rgba(0,0,0,0.4);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      cursor: pointer;
+    }
+    .nav-logo-img:hover {
+      transform: rotate(5deg) scale(1.05);
+      box-shadow:
+        0 0 0 4px rgba(245,166,35,0.5),
+        0 0 40px rgba(245,166,35,0.7),
+        0 0 80px rgba(245,166,35,0.4),
+        0 12px 40px rgba(0,0,0,0.5);
+    }
+
+    @keyframes logoGradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .nav-logo-text { font-size: 24px; font-weight: 900; color: var(--text); letter-spacing: 4px; -webkit-text-stroke: 1.5px #f5a623; text-shadow: 0 0 8px rgba(245,166,35,0.4); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 15px; font-weight: 500; letter-spacing: 1px; transition: color 0.3s; }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 160px 40px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: 50%;
+      transform: translateX(-50%);
+      width: 900px; height: 900px;
+      background: radial-gradient(ellipse, var(--accent-dim) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 10px 24px;
+      background: var(--accent-dim);
+      border: 2px solid var(--accent);
+      border-radius: 50px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      margin-bottom: 36px;
+    }
+    .hero-title {
+      font-size: clamp(64px, 12vw, 140px);
+      font-weight: 900;
+      letter-spacing: 10px;
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+    .hero-title .accent { color: var(--accent); }
+    .hero-subtitle {
+      font-size: 20px;
+      color: var(--text-muted);
+      letter-spacing: 5px;
+      margin-bottom: 70px;
+    }
+
+    /* TEAM PHOTO & VIDEO — 固定上下垂直排列 */
+    .hero-media-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0px;
+      align-items: center;
+      width: 100%;
+      max-width: 800px;
+    }
+    .team-photo-wrapper { width: 100%; max-width: 800px; aspect-ratio: 16/9; position: relative; }
+    /* 調整大小手柄 - 只喺角落 */
+    .photo-resize-handles { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 5; }
+    .photo-resize-handle { position: absolute; width: 20px; height: 20px; background: rgba(245,166,35,0.8); border: 2px solid #fff; border-radius: 4px; pointer-events: auto; cursor: nwse-resize; opacity: 0; transition: opacity 0.2s; }
+    .team-photo-wrapper:hover .photo-resize-handle { opacity: 1; }
+    .photo-resize-handle-se { right: -10px; bottom: -10px; }
+    .photo-resize-handle-sw { left: -10px; bottom: -10px; cursor: nesw-resize; }
+    .photo-resize-handle-ne { right: -10px; top: -10px; cursor: nesw-resize; }
+    .photo-resize-handle-nw { left: -10px; top: -10px; }
+    .team-photo-wrapper img {
+      width: 100%;
+      height: 100%;
+      border-radius: 28px;
+      border: 2px solid var(--border);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 80px var(--accent-dim);
+      background: var(--surface-2);
+      object-fit: cover;
+    }
+    .team-photo-hint {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(245,166,35,0.95);
+      color: #000;
+      padding: 16px 32px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 800;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .team-photo-wrapper:hover .team-photo-hint { opacity: 1; }
+    .team-photo-caption {
+      display: none;
+    }
+    .team-video-wrapper { width: 100%; max-width: 800px; aspect-ratio: 16/9; position: relative; }
+    .team-video-wrapper video {
+      width: 100%;
+      height: auto;
+      border-radius: 28px;
+      border: 2px solid var(--border);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 80px var(--accent-dim);
+      background: var(--surface-2);
+      display: block;
+    }
+    /* 音量控制条 - 嵌入視頻底部，與視頻同寬 */
+    #video-volume-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      border-radius: 0 0 28px 28px;
+      border-left: 2px solid var(--border);
+      border-right: 2px solid var(--border);
+      border-bottom: 2px solid var(--border);
+      backdrop-filter: blur(8px);
+      box-sizing: border-box;
+    }
+
+    #video-volume {
+      -webkit-appearance: none;
+      appearance: none;
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.3);
+      outline: none;
+      cursor: pointer;
+    }
+    #video-volume::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+    #video-volume::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 8px rgba(245,166,35,0.5);
+    }
+    .team-video-placeholder {
+      width: 100%;
+      height: 300px;
+      border-radius: 28px;
+      border: 2px dashed var(--border);
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .team-video-placeholder:hover {
+      border-color: var(--accent);
+      background: var(--surface-2);
+    }
+    .team-video-placeholder .icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+    .team-video-placeholder .text {
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .team-video-hint {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(245,166,35,0.95);
+      color: #000;
+      padding: 16px 32px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 800;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .team-video-wrapper:hover .team-video-hint { opacity: 1; }
+
+    /* ABOUT */
+    .about { padding: 100px 40px; max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 26px; font-weight: 800; letter-spacing: 5px;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 18px; padding: 4px 8px; display: inline-block;
+    }
+    .section-title {
+      font-size: clamp(38px, 5vw, 58px); font-weight: 900; letter-spacing: 4px;
+      margin-bottom: 28px; line-height: 1.3; padding: 8px;
+    }
+    .section-title .accent { color: var(--accent); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; margin-top: 15px; }
+    .about-text p {
+      color: var(--text-muted); line-height: 2;
+      font-size: 17px; margin-bottom: 24px; padding: 8px;
+    }
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .stat-card {
+      background: var(--surface); border: 2px solid var(--border);
+      border-radius: var(--card-radius); padding: 32px 20px;
+      text-align: center; transition: all 0.3s;
+    }
+    .stat-card:hover { border-color: var(--accent); background: var(--surface-2); transform: translateY(-4px); }
+    .stat-number {
+      font-size: 52px; font-weight: 900; color: var(--accent);
+      line-height: 1; margin-bottom: 10px;
+    }
+    .stat-label {
+      font-size: 14px; color: var(--text-muted);
+      letter-spacing: 2px; padding: 4px 8px;
+    }
+
+    /* MEMBERS */
+    .members-section { padding: 100px 40px; max-width: 1250px; margin: 0 auto; }
+    .members-header { text-align: center; margin-bottom: 70px; }
+    .members-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+
+    .member-card {
+      background: var(--surface); border: 2px solid var(--border);
+      border-radius: var(--card-radius); overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .member-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 70px rgba(0,0,0,0.5), 0 0 40px var(--accent-dim);
+      border-color: rgba(245,166,35,0.4);
+    }
+    .member-img-area {
+      position: relative; padding: 28px 24px 18px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .member-logo {
+      width: 70px; height: 70px; border-radius: 50%;
+      object-fit: cover; border: 3px solid rgba(245,166,35,0.5);
+      position: absolute; top: 14px; right: 14px;
+      background: var(--surface-2);
+    }
+    .member-avatar {
+      width: 110px; height: 110px; border-radius: 50%;
+      object-fit: cover; border: 4px solid var(--border);
+      background: var(--surface-2);
+    }
+    .member-info { padding: 0 20px 24px; text-align: center; }
+    .member-name {
+      font-size: 38px; font-weight: 800;
+      letter-spacing: 3px; margin-bottom: 6px; padding: 4px 8px;
+    }
+    .member-title {
+      font-size: 24px; color: var(--accent);
+      letter-spacing: 2px; font-weight: 700; padding: 2px 8px;
+    }
+    .member-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; }
+    .member-tag {
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 20px; padding: 6px 14px;
+      font-size: 18px; color: var(--text-muted);
+      transition: all 0.3s;
+    }
+    .member-tag:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* JOURNAL / 日誌 */
+    .journal-section {
+      padding: 100px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .journal-intro {
+      color: var(--text-muted);
+      font-size: 17px;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .journal-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    .journal-nav-label { color: var(--accent); font-size: 18px; font-weight: bold; margin-right: 8px; }
+
+    /* 未來動向 */
+    .upcoming-section {
+      background: var(--surface);
+      border: 2px dashed var(--accent);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 36px;
+    }
+    .upcoming-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .upcoming-label {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: 2px;
+      display: inline-flex;
+      gap: 2px;
+    }
+    .upcoming-label span {
+      display: inline-block;
+      animation: labelRotate 2s ease-in-out infinite;
+    }
+    .upcoming-label span:nth-child(1) { animation-delay: 0s; }
+    .upcoming-label span:nth-child(2) { animation-delay: 0.12s; }
+    .upcoming-label span:nth-child(3) { animation-delay: 0.24s; }
+    .upcoming-label span:nth-child(4) { animation-delay: 0.36s; }
+    .upcoming-label span:nth-child(5) { animation-delay: 0.48s; }
+
+    /* 效果1：逐字旋转摇摆（默认） */
+    @keyframes labelRotate {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+        color: var(--accent);
+      }
+      25% {
+        transform: translateY(-5px) rotate(-8deg);
+        color: #fff;
+      }
+      50% {
+        transform: translateY(0) rotate(8deg) scale(1.25);
+        color: var(--accent);
+      }
+      75% {
+        transform: translateY(3px) rotate(-4deg);
+        color: #fff;
+      }
+    }
+
+    /* 效果2：逐字3D翻转 */
+    @keyframes labelFlip {
+      0%, 100% {
+        transform: perspective(300px) rotateX(0deg);
+        color: var(--accent);
+      }
+      50% {
+        transform: perspective(300px) rotateX(360deg);
+        color: #fff;
+      }
+    }
+
+    /* 效果3：逐字发光闪烁 */
+    @keyframes labelGlow {
+      0%, 100% {
+        text-shadow: 0 0 8px var(--accent);
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        text-shadow: 0 0 25px var(--accent), 0 0 50px var(--accent), 0 0 75px #fff;
+        opacity: 0.9;
+        transform: scale(1.15);
+        color: #fff;
+      }
+    }
+
+    /* 效果4：逐字弹跳 */
+    @keyframes labelBounce {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        color: var(--accent);
+      }
+      40% {
+        transform: translateY(-10px) scale(1.1);
+        color: #fff;
+      }
+      60% {
+        transform: translateY(-6px) scale(1.05);
+      }
+    }
+
+    /* 切換動畫效果：效果3-逐字發光閃爍 */
+    .upcoming-label span {
+      animation: labelGlow 1.5s ease-in-out infinite;
+    }
+    .upcoming-add-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .upcoming-add-btn:hover {
+      opacity: 0.85;
+      transform: scale(1.05);
+    }
+    .upcoming-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .upcoming-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: all 0.3s;
+      flex-wrap: wrap;
+    }
+    .upcoming-item:hover {
+      border-color: var(--accent);
+      background: rgba(245,166,35,0.08);
+    }
+    .upcoming-date {
+      color: var(--accent);
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      min-width: 90px;
+      padding: 4px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .upcoming-item:hover .upcoming-date {
+      background: rgba(245,166,35,0.15);
+    }
+    .upcoming-title {
+      font-size: 16px;
+      color: var(--text);
+      font-weight: 600;
+      flex: 1;
+      padding: 4px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .upcoming-item:hover .upcoming-title {
+      background: rgba(245,166,35,0.1);
+    }
+    .upcoming-location {
+      font-size: 14px;
+      color: var(--text-muted);
+      padding: 4px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .upcoming-item:hover .upcoming-location {
+      background: rgba(245,166,35,0.1);
+    }
+    .upcoming-delete-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all 0.2s;
+      margin-left: auto;
+    }
+    .upcoming-delete-btn:hover {
+      background: rgba(255,0,0,0.2);
+      color: #ff4444;
+    }
+    #journal-year-picker, #journal-month-picker {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      font-size: 16px;
+    }
+    #journal-go-btn {
+      padding: 8px 20px;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent);
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 8px 20px;
+    }
+    #journal-go-btn:hover { opacity: 0.85; }
+    .journal-entry {
+      margin-bottom: 30px;
+    }
+    .entry-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+    .entry-avatar {
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--accent);
+      box-shadow: 0 0 20px var(--accent-glow);
+      background: var(--surface-2);
+      cursor: pointer;
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+    .entry-avatar:hover {
+      transform: scale(1.05);
+    }
+    .entry-meta-info {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    .entry-date {
+      color: var(--accent);
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 4px;
+    }
+    .entry-weather {
+      font-size: 20px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      padding: 2px 6px;
+      background: var(--surface);
+      border-radius: 8px;
+    }
+    .entry-weather:hover {
+      transform: scale(1.3);
+    }
+    .entry-temp {
+      font-size: 19px;
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 4px 10px;
+      background: var(--surface);
+      border-radius: 8px;
+    }
+    }
+    .entry-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 32px;
+      transition: all 0.3s;
+    }
+    .entry-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 30px var(--accent-dim);
+    }
+    .entry-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .entry-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--text);
+    }
+    .entry-location {
+      font-size: 14px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+    .entry-desc {
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-size: 16px;
+      margin-bottom: 18px;
+    }
+    .entry-link {
+      display: inline-block;
+      background: var(--accent-dim);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      padding: 10px 20px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+    }
+    .entry-link:hover {
+      background: var(--accent);
+      color: #000;
+      transform: scale(1.05);
+    }
+    .journal-add-hint {
+      text-align: center;
+      padding: 30px;
+      color: var(--text-muted);
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 56px 40px; text-align: center;
+      color: var(--text-muted); font-size: 15px; letter-spacing: 2px;
+    }
+    footer .brand { font-weight: 900; letter-spacing: 4px; padding: 4px 8px; font-size: 52px; display: block; }
+    footer .brand .first { color: #fff; }
+    footer .brand .accent { color: var(--accent); }
+    footer .brand .last { color: #fff; }
+    footer .sub { padding: 4px 8px; }
+
+    /* FUN RUN / 熱血 FUN RUN */
+    .funrun-section {
+      padding: 100px 40px;
+      text-align: center;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .funrun-container { max-width: 1250px; margin: 0 auto; }
+    .funrun-intro {
+      color: var(--text-muted);
+      font-size: 16px;
+      letter-spacing: 2px;
+      margin-bottom: 48px;
+    }
+    .funrun-carousel-wrapper {
+      overflow: hidden;
+      width: 100%;
+      position: relative;
+      padding: 20px 0;
+    }
+    .funrun-carousel {
+      display: flex;
+      gap: 20px;
+      width: fit-content;
+    }
+    .funrun-card {
+      flex-shrink: 0;
+      width: 280px;
+      height: 280px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 2px solid var(--border);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      background: #000;
+    }
+    .funrun-card:hover {
+      transform: scale(1.05);
+      border-color: var(--accent);
+    }
+    .funrun-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .funrun-card .funrun-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      padding: 20px 12px 12px;
+      color: #fff;
+      font-size: 13px;
+      text-align: left;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .funrun-card:hover .funrun-overlay {
+      opacity: 1;
+    }
+    .funrun-add-btn {
+      margin-top: 32px;
+      padding: 12px 28px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+      letter-spacing: 1px;
+    }
+    .funrun-add-btn:hover {
+      opacity: 0.85;
+      transform: scale(1.05);
+    }
+
+    /* 相片刪除按鈕（編輯模式） */
+    .funrun-delete-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255,0,0,0.8);
+      color: #fff;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      z-index: 5;
+      display: none;
+      transition: all 0.2s;
+    }
+    .funrun-card { position: relative; }
+    .funrun-section:not([data-edit="0"]) .funrun-delete-btn { display: flex !important; align-items: center; justify-content: center; }
+    .funrun-delete-btn:hover { background: #ff0000; transform: scale(1.15); }
+
+    /* 排序模式 */
+    .funrun-card.sortable {
+      cursor: grab;
+    }
+    .funrun-card.sortable:active {
+      cursor: grabbing;
+    }
+    .funrun-card.dragging {
+      opacity: 0.5;
+      transform: scale(1.1) !important;
+      border-color: var(--accent) !important;
+      z-index: 1000;
+    }
+    .funrun-card.drag-over {
+      border-color: #4CAF50 !important;
+      border-style: dashed !important;
+    }
+    /* 排序提示文字 */
+    .funrun-sort-hint {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.9);
+      border: 2px solid var(--accent);
+      padding: 12px 24px;
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 14px;
+      z-index: 9999;
+      display: none;
+    }
+
+    /* 左右箭嘴 */
+    .funrun-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(0,0,0,0.6);
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: none;
+    }
+    .funrun-arrow:hover {
+      background: var(--accent);
+      color: #000;
+      transform: translateY(-50%) scale(1.1);
+    }
+    .funrun-arrow-left { left: 12px; }
+    .funrun-arrow-right { right: 12px; }
+    .funrun-carousel-wrapper { position: relative; }
+    .funrun-carousel-wrapper:hover .funrun-arrow { display: flex; align-items: center; justify-content: center; }
+
+    /* 管理員區域 */
+    .funrun-admin-area { margin-top: 15px; }
+    .funrun-admin-btn:hover { background: var(--accent) !important; color: #000 !important; }
+    .funrun-logout-btn:hover { background: rgba(255,255,255,0.2) !important; }
+
+    /* RESPONSIVE */
+    @media (max-width: 1100px) { .members-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 900px) { .members-grid { grid-template-columns: repeat(2, 1fr); } .about-grid { grid-template-columns: 1fr; gap: 50px; } }
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; top: 0; }
+      .hero { padding: 100px 20px 50px; }
+      .members-section { padding: 60px 20px; }
+      .stat-number { font-size: 36px; }
+      .about { padding: 60px 20px; }
+      .journal-section { padding: 60px 20px; }
+      .entry-card { padding: 20px; }
+      .entry-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      #admin-bar { padding: 8px 10px; gap: 5px; min-width: 130px; }
+      #admin-bar .hint { display: none; }
+      #admin-bar button { padding: 6px 10px; font-size: 12px; }
+    }
+    @media (max-width: 480px) { .hero-title { letter-spacing: 5px; } .members-grid { gap: 14px; } }
   </style>
 </head>
 <body>
-  <!-- Navigation -->
+
+  <!-- ADMIN BAR -->
+  <!-- 浮動按鈕組 -->
+  <div id="float-btn-group">
+    <button id="back-to-journal" onclick="document.getElementById('journal').scrollIntoView({behavior:'smooth'})">回到活動日誌</button>
+    <button id="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">回到頁頂</button>
+  </div>
+
+  <div id="admin-bar">
+    <span class="logo-badge">✨ 編輯模式</span>
+    <span class="hint">👉 <span>黃色標示</span> 可點擊編輯 · <span>圖片上</span> hover 可上傳</span>
+    <button onclick="SMG.saveAll()">💾 儲存</button>
+    <button class="blue" onclick="SMG.exportData()">📥 備份下載</button>
+    <button class="orange" onclick="document.getElementById('import-file').click()">📤 恢復備份</button>
+    <button onclick="SMG.adminLogout()">🚪 登出</button>
+    <input type="file" id="import-file" accept=".json" style="display:none">
+    <span class="status" id="save-status"></span>
+  </div>
+
+  <!-- 簡化版登入按鈕（admin bar 隱藏時顯示） -->
+  <div id="admin-login-btn" style="position:fixed;bottom:30px;left:30px;z-index:9998;display:none;">
+    <button onclick="SMG.adminLogin()" style="background:rgba(245,166,35,0.9);color:#000;border:none;padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;">🔒 Admin</button>
+  </div>
+
+  <!-- NAV -->
   <nav>
     <div class="nav-logo">
-      <img id="nav-logo" src="" alt="Logo">
-      <span id="nav-text">鋼鐵鎂</span>
+      <img class="nav-logo-img img-clickable" id="nav-logo" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/nav-logo" alt="Logo" title="點擊上傳 Logo">
+
     </div>
-    <div class="nav-links">
-      <a href="#about">認識我們</a>
+    <ul class="nav-links">
+      <a href="#home">首頁</a>
+      <a href="#about">關於我們</a>
       <a href="#members">成員</a>
-      <a href="#journal">活動日誌</a>
-      <a href="#funrun">FUN RUN</a>
-    </div>
+      <a href="#funrun">周五熱血 FUN RUN</a>
+      <a href="#upcoming-section">未來動向</a>
+      <a href="#journal">日誌</a>
+    </ul>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- HERO -->
   <section class="hero" id="home">
-    <div class="hero-bg"></div>
-    <div class="hero-content">
-      <div class="hero-title">
-        <span id="hero-t1">鋼</span><br>
-        <span id="hero-t2">鎂</span>
+    <div class="hero-badge editable" id="hero-badge">RUN · EAT · PLAY · FUN</div>
+    <h1 class="hero-title">
+      <span class="editable" id="hero-t1">鋼</span><span class="accent">鐵</span><span class="editable" id="hero-t2">鎂</span>
+    </h1>
+    <p class="hero-subtitle editable" id="hero-sub">STEEL MAG · 跑友會</p>
+
+    <div class="hero-media-wrapper">
+      <div class="team-photo-wrapper" id="team-photo-wrapper">
+        <div class="photo-resize-handles">
+          <div class="photo-resize-handle photo-resize-handle-nw" data-dir="nw"></div>
+          <div class="photo-resize-handle photo-resize-handle-ne" data-dir="ne"></div>
+          <div class="photo-resize-handle photo-resize-handle-sw" data-dir="sw"></div>
+          <div class="photo-resize-handle photo-resize-handle-se" data-dir="se"></div>
+        </div>
+        <img class="img-clickable" id="team-photo" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/team-photo" alt="鋼鐵鎂跑友會團體照" title="點擊上傳團體相">
+        <div class="team-photo-hint">👆 點擊上傳團體相</div>
+        <p class="team-photo-caption editable" id="team-caption">每一個步伐，都是鋼鐵意志的見證</p>
       </div>
-      <p class="hero-sub" id="hero-sub">優良的跑友魂 · 踏出鋼鐵意志</p>
-      <div class="hero-badge" id="hero-badge">RUN · EAT · PLAY · FUN · REPEAT</div>
+      <div class="team-video-container" id="team-video-container">
+        <div class="team-video-wrapper" id="team-video-wrapper">
+          <video id="team-video" class="img-clickable" autoplay muted loop playsinline poster="" title="點擊上傳團體影片" style="display:none;"></video>
+          <div class="team-video-placeholder" id="team-video-placeholder" title="點擊上傳團體影片">
+            <span class="icon">🎬</span>
+            <span class="text">點擊上傳團體影片</span>
+          </div>
+          <div class="team-video-hint">👆 點擊上傳團體影片</div>
+          <!-- 音量控件（嵌入視頻底部） -->
+          <div id="video-volume-control" style="display:none;">
+            <span id="volume-icon" style="font-size:18px;cursor:pointer;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.5);">🔇</span>
+            <input type="range" id="video-volume" min="0" max="100" value="30" style="flex:1;-webkit-appearance:none;background:rgba(255,255,255,0.3);height:4px;border-radius:2px;outline:none;cursor:pointer;">
+            <span id="volume-label" style="font-size:12px;color:#fff;min-width:36px;text-align:right;text-shadow:0 1px 3px rgba(0,0,0,0.5);">30%</span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- About Section -->
-  <section id="about">
-    <div class="section-label" id="about-label">ABOUT US</div>
-    <h2 class="section-title" id="about-title">用雙腳<br>寫下<br>熱血故事</h2>
-    <div class="about-text">
-      <p id="about-p1"></p>
-      <br>
-      <p id="about-p2"></p>
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-grid">
+      <div class="about-text">
+        <div class="section-label editable" id="about-label">ABOUT US</div>
+        <h2 class="section-title editable" id="about-title">用雙腳<br>寫下<br><span class="accent">熱血</span>故事</h2>
+        <p class="editable" id="about-p1">鋼鐵鎂是一群熱愛跑步的朋友組成的非正式跑友會。我們相信，每一步都是修行，每一公里都是自我突破。沒有最快的步伐，只有最堅定的意志。</p>
+        <p class="editable" id="about-p2">不論你是初學者還是資深跑者，只要有心，這裡就是你的歸屬。一起流汗、一起成長、一起在終點線前笑著流淚。</p>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-number editable" id="stat1-num">8</div>
+          <div class="stat-label editable" id="stat1-label">核心成員</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number editable" id="stat2-num">∞</div>
+          <div class="stat-label editable" id="stat2-label">跑步熱情</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number editable" id="stat3-num">24/7</div>
+          <div class="stat-label editable" id="stat3-label">互相支持</div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Team Photo Section -->
-  <section class="team-photo-section" id="team-photo">
-    <div class="section-label" id="team-label">TEAM PHOTO</div>
-    <img class="team-photo" id="team-photo-img" src="" alt="團體相片">
-    <p class="team-caption" id="team-caption">每一個步伐，都是鋼鐵意志的見證</p>
-  </section>
+  <!-- MEMBERS -->
+  <section class="members-section" id="members">
+    <div class="members-header">
+      <div class="section-label editable" id="members-label">MEMBERS</div>
+      <h2 class="section-title editable" id="members-title">認識<span class="accent">我們</span></h2>
+    </div>
 
-  <!-- Members Section -->
-  <section id="members">
-    <div class="section-label" id="members-label">METALS</div>
-    <h2 class="section-title" id="members-title">認識金屬</h2>
-    <div class="team-grid" id="members-grid">
-      <!-- 成員卡片會動態生成 -->
+    <div class="members-grid">
+
+      <!-- 1. 鐵 AK -->
+      <div class="member-card">
+        <div class="member-img-area">
+          <img class="member-logo img-clickable" id="ak-logo" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/ak-logo" alt="Logo" title="點擊上傳 Logo">
+          <img class="member-avatar img-clickable" id="ak-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/ak-avatar" alt="頭像" title="點擊上傳頭像">
+        </div>
+        <div class="member-info">
+          <div class="member-name editable" id="ak-name">鐵 AK</div>
+          <div class="member-title editable" id="ak-title">創會成員</div>
+          <div class="member-tags">
+            <span class="member-tag editable" id="ak-tag1">長跑</span>
+            <span class="member-tag editable" id="ak-tag2">意志如鐵</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. 鋼泰 -->
+      <div class="member-card">
+        <div class="member-img-area">
+          <img class="member-logo img-clickable" id="gang-logo" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/gang-logo" alt="Logo" title="點擊上傳 Logo">
+          <img class="member-avatar img-clickable" id="gang-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/gang-avatar" alt="頭像" title="點擊上傳頭像">
+        </div>
+        <div class="member-info">
+          <div class="member-name editable" id="gang-name">鋼泰</div>
+          <div class="member-title editable" id="gang-title">核心成員</div>
+          <div class="member-tags">
+            <span class="member-tag editable" id="gang-tag1">穩如鋼</span>
+            <span class="member-tag editable" id="gang-tag2">團隊支柱</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. 鎂 Sa -->
+      <div class="member-card">
+        <div class="member-img-area">
+          <img class="member-logo img-clickable" id="sa-logo" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/sa-logo" alt="Logo" title="點擊上傳 Logo">
+          <img class="member-avatar img-clickable" id="sa-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/sa-avatar" alt="頭像" title="點擊上傳頭像">
+        </div>
+        <div class="member-info">
+          <div class="member-name editable" id="sa-name">鎂 Sa</div>
+          <div class="member-title editable" id="sa-title">核心成員</div>
+          <div class="member-tags">
+            <span class="member-tag editable" id="sa-tag1">輕盈如鎂</span>
+            <span class="member-tag editable" id="sa-tag2">速度擔當</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. 鋁俠 -->
+      <div class="member-card">
+        <div class="member-img-area">
+          <img class="member-logo img-clickable" id="lu-logo" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/lu-logo" alt="Logo" title="點擊上傳 Logo">
+          <img class="member-avatar img-clickable" id="lu-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/lu-avatar" alt="頭像" title="點擊上傳頭像">
+        </div>
+        <div class="member-info">
+          <div class="member-name editable" id="lu-name">鋁俠</div>
+          <div class="member-title editable" id="lu-title">核心成員</div>
+          <div class="member-tags">
+            <span class="member-tag editable" id="lu-tag1">俠氣</span>
+            <span class="member-tag editable" id="lu-tag2">低調高手</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. 鑽爆 -->
+      <div class="member-card">
+        <div class="member-img-area">
+          <img class="member-logo img-clickable" id="juan-logo" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/juan-logo" alt="Logo" title="點擊上傳 Logo">
+          <img class="member-avatar img-clickable" id="juan-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/juan-avatar" alt="頭像" title="點擊上傳頭像">
+        </div>
+        <div class="member-info">
+          <div class="member-name editable" id="juan-name">鑽爆</div>
+          <div class="member-title editable" id="juan-title">核心成員</div>
+          <div class="member-tags">
+            <span class="member-tag editable" id="juan-tag1">耀眼如鑽</span>
+            <span class="member-tag editable" id="juan-tag2">突破自我</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. 銅珍 -->
+      <div class="member-card">
+        <div class="member-img-area">
+          <img class="member-logo img-clickable" id="tung-logo" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/tung-logo" alt="Logo" title="點擊上傳 Logo">
+          <img class="member-avatar img-clickable" id="tung-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/tung-avatar" alt="頭像" title="點擊上傳頭像">
+        </div>
+        <div class="member-info">
+          <div class="member-name editable" id="tung-name">銅珍</div>
+          <div class="member-title editable" id="tung-title">核心成員</div>
+          <div class="member-tags">
+            <span class="member-tag editable" id="tung-tag1">珍貴隊友</span>
+            <span class="member-tag editable" id="tung-tag2">溫暖人心</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. 銀礦 -->
+      <div class="member-card">
+        <div class="member-img-area">
+          <img class="member-logo img-clickable" id="ngan-logo" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/ngan-logo" alt="Logo" title="點擊上傳 Logo">
+          <img class="member-avatar img-clickable" id="ngan-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/ngan-avatar" alt="頭像" title="點擊上傳頭像">
+        </div>
+        <div class="member-info">
+          <div class="member-name editable" id="ngan-name">銀礦</div>
+          <div class="member-title editable" id="ngan-title">核心成員</div>
+          <div class="member-tags">
+            <span class="member-tag editable" id="ngan-tag1">內斂沉穩</span>
+            <span class="member-tag editable" id="ngan-tag2">礦藏實力</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. 鐵珊 -->
+      <div class="member-card">
+        <div class="member-img-area">
+          <img class="member-logo img-clickable" id="san-logo" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/san-logo" alt="Logo" title="點擊上傳 Logo">
+          <img class="member-avatar img-clickable" id="san-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/san-avatar" alt="頭像" title="點擊上傳頭像">
+        </div>
+        <div class="member-info">
+          <div class="member-name editable" id="san-name">鐵珊</div>
+          <div class="member-title editable" id="san-title">核心成員</div>
+          <div class="member-tags">
+            <span class="member-tag editable" id="san-tag1">毅力驚人</span>
+            <span class="member-tag editable" id="san-tag2">珊言珊語</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <!-- Fun Run Section -->
-  <section id="funrun">
-    <div class="section-label" id="funrun-label">FUN RUN</div>
-    <h2 class="section-title">精彩瞬間</h2>
-    <div class="funrun-carousel" id="funrun-carousel">
-      <div class="loading">載入中...</div>
-    </div>
-    <div style="text-align:center;margin-top:24px;">
-      <button class="funrun-nav prev" onclick="moveFunRun(-1)">&#10094;</button>
-      <button class="funrun-nav next" onclick="moveFunRun(1)">&#10095;</button>
+  <!-- FUN RUN / 熱血 FUN RUN -->
+  <section class="funrun-section" id="funrun">
+    <div class="funrun-container">
+      <div class="section-label editable" id="funrun-label">FUN RUN</div>
+      <h2 class="section-title">週五 <span class="accent">熱血 FUN RUN</span></h2>
+      <p class="funrun-intro">逢星期五晚上風雨無阻熱血Fun Run</p>
+
+      <div class="funrun-carousel-wrapper">
+        <button class="funrun-arrow funrun-arrow-left" id="funrun-arrow-left" onclick="SMG.moveFunRun(-1)">❮</button>
+        <div class="funrun-carousel" id="funrun-carousel">
+          <!-- 相片會由 JS 動態生成 -->
+        </div>
+        <button class="funrun-arrow funrun-arrow-right" id="funrun-arrow-right" onclick="SMG.moveFunRun(1)">❯</button>
+      </div>
+
+      <!-- 管理員按鈕 -->
+      <div class="funrun-admin-area" id="funrun-admin-area" style="text-align:center;margin-top:15px;">
+        <button class="funrun-admin-btn" id="funrun-admin-btn" onclick="SMG.funRunAdminLogin()" style="padding:8px 18px;background:rgba(245,166,35,0.15);border:1px solid var(--accent);color:var(--accent);border-radius:8px;cursor:pointer;font-size:14px;">🔒 管理員登入</button>
+      </div>
+
+      <div class="funrun-edit-controls" id="funrun-edit-controls" style="display:none;margin-top:20px;text-align:center;">
+        <button class="funrun-add-btn" id="funrun-add-btn" onclick="SMG.addFunRunPhoto()" style="padding:10px 24px;background:var(--accent);border:none;color:#000;border-radius:8px;cursor:pointer;font-weight:bold;margin-right:10px;">+ 新增相片</button>
+        <button class="funrun-sort-btn" id="funrun-sort-btn" onclick="SMG.toggleFunRunSortMode()" style="padding:10px 24px;background:rgba(255,255,255,0.1);border:1px solid var(--accent);color:var(--accent);border-radius:8px;cursor:pointer;margin-right:10px;">🔄 拖曳排序</button>
+        <button class="funrun-backup-btn" onclick="SMG.exportFunRunPhotos()" style="padding:10px 24px;background:rgba(33,150,243,0.15);border:1px solid #2196F3;color:#2196F3;border-radius:8px;cursor:pointer;margin-right:10px;">📥 備份</button>
+        <button class="funrun-restore-btn" onclick="document.getElementById('funrun-restore-file').click()" style="padding:10px 24px;background:rgba(255,152,0,0.15);border:1px solid #FF9800;color:#FF9800;border-radius:8px;cursor:pointer;margin-right:10px;">📤 恢復</button>
+        <button class="funrun-reset-github-btn" onclick="SMG.resetHiddenGitHubPhotos()" style="padding:10px 18px;background:rgba(156,39,176,0.15);border:1px solid #9C27B0;color:#9C27B0;border-radius:8px;cursor:pointer;margin-right:10px;font-size:13px;" title="重新顯示所有 GitHub 相片">🔄 重置 GitHub</button>
+        <button class="funrun-clear-btn" onclick="SMG.clearAllFunRunPhotos()" style="padding:10px 18px;background:rgba(255,0,0,0.15);border:1px solid #ff4444;color:#ff4444;border-radius:8px;cursor:pointer;margin-right:10px;font-size:13px;" title="清除所有本地相片">🗑️ 清除本地</button>
+        <button class="funrun-diagnose-btn" onclick="SMG.diagnoseFunRunPhotos()" style="padding:10px 18px;background:rgba(0,150,136,0.15);border:1px solid #009688;color:#009688;border-radius:8px;cursor:pointer;margin-right:10px;font-size:13px;" title="診斷 IndexedDB 數據">🔍 診斷</button>
+        <input type="file" id="funrun-restore-file" accept=".json" style="display:none" onchange="SMG.importFunRunPhotos(this)">
+        <button class="funrun-logout-btn" id="funrun-logout-btn" onclick="SMG.funRunAdminLogout()" style="padding:10px 24px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--text);border-radius:8px;cursor:pointer;">登出</button>
+      </div>
+
+      <!-- 排序提示 -->
+      <div class="funrun-sort-hint" id="funrun-sort-hint">🔄 拖曳相片可調整順序，完成後按「💾 儲存順序」</div>
     </div>
   </section>
 
-  <!-- Journal Section -->
-  <section id="journal">
-    <div class="section-label" id="journal-label">JOURNAL</div>
-    <h2 class="section-title" id="journal-title">活動日誌</h2>
-    <p id="journal-intro" style="color:var(--text-muted);margin-bottom:32px;"></p>
-    <div class="journal-list" id="journal-list">
-      <!-- 活動日誌會動態生成 -->
+  <!-- JOURNAL / 日誌 -->
+  <section class="journal-section" id="journal">
+    <div class="journal-container">
+      <div class="section-label editable" id="journal-label">JOURNAL</div>
+      <h2 class="section-title editable" id="journal-title">活動<span class="accent">日誌</span></h2>
+      <p class="journal-intro editable" id="journal-intro">記錄我們每一個精彩瞬間 — 比賽、訓練、聚會，每個故事都值得珍藏。</p>
+
+      <!-- 未來動向 -->
+      <div class="upcoming-section" id="upcoming-section">
+        <div class="upcoming-header">
+          <span class="upcoming-label"><span>📅</span><span>未</span><span>來</span><span>動</span><span>向</span></span>
+          <button class="upcoming-add-btn" id="add-upcoming-btn" onclick="SMG.promptAdminPassword()">+ 新增動向</button>
+        </div>
+        <div class="upcoming-list" id="upcoming-list">
+          <!-- 動向範例 1 -->
+          <div class="upcoming-item" data-upcoming-id="1" data-date="2026.05.15">
+            <span class="upcoming-date editable" id="upcoming1-date">2026.05.15</span>
+            <span class="upcoming-title editable" id="upcoming1-title">🏃 待填寫活動名稱</span>
+            <span class="upcoming-location editable" id="upcoming1-location">📍 待填寫地點</span>
+            <button class="upcoming-delete-btn" onclick="SMG.deleteUpcomingEvent(this)">✕</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 前往 -->
+      <div class="journal-nav">
+        <span class="journal-nav-label">前往：</span>
+        <select id="journal-year-picker">
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026" selected>2026</option>
+        </select>
+        <select id="journal-month-picker">
+          <option value="01">1月</option>
+          <option value="02">2月</option>
+          <option value="03">3月</option>
+          <option value="04">4月</option>
+          <option value="05">5月</option>
+          <option value="06">6月</option>
+          <option value="07">7月</option>
+          <option value="08">8月</option>
+          <option value="09">9月</option>
+          <option value="10">10月</option>
+          <option value="11">11月</option>
+          <option value="12">12月</option>
+        </select>
+        <button id="journal-go-btn" onclick="jumpToEntry()">GO</button>
+      </div>
+
+      <!-- 001 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry001-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry001-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry001-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry001-weather" title="天氣 Emoji">🌤️</span>
+            <span class="entry-temp editable" id="entry001-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry001-title">001</h3>
+            <span class="entry-location editable" id="entry001-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry001-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry001-link" href="https://photos.app.goo.gl/WzkThSkEVSpeDPzm7" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry001-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 1 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry1-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry1-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry1-date">📅 2026.04.20</span>
+            <span class="entry-weather editable" id="entry1-weather" title="天氣 Emoji">🌤️</span>
+            <span class="entry-temp editable" id="entry1-temp" title="溫度">22°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry1-title">🏃 青衣樂悠班 10K 比賽</h3>
+            <span class="entry-location editable" id="entry1-location">📍 青衣海濱公園</span>
+          </div>
+          <p class="entry-desc editable" id="entry1-desc">團隊首戰！一齊完成咗10公里路程，大家發揮出色，全部順利完成！</p>
+          <a class="entry-link" id="entry1-link" href="https://photos.app.goo.gl/xYB3MNhPDBfgr4Jg7" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry1-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/xYB3MNhPDBfgr4Jg7</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 2 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry2-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry2-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry2-date">📅 2026.03.15</span>
+            <span class="entry-weather editable" id="entry2-weather" title="天氣 Emoji">☀️</span>
+            <span class="entry-temp editable" id="entry2-temp" title="溫度">18°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry2-title">🌅 晨跑訓練</h3>
+            <span class="entry-location editable" id="entry2-location">📍 沙田城門河</span>
+          </div>
+          <p class="entry-desc editable" id="entry2-desc">清晨集合，大家一齊慢跑5公里，之後再一齊嘆早餐！</p>
+          <a class="entry-link" id="entry2-link" href="https://photos.app.goo.gl/gBX2NvKdtdEjHw7a7" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry2-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/gBX2NvKdtdEjHw7a7</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 7 (原 entry4) -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry4-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry4-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry4-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry4-weather" title="天氣 Emoji">☀️</span>
+            <span class="entry-temp editable" id="entry4-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry4-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry4-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry4-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry4-link" href="https://photos.app.goo.gl/LKrZv8JUpFjBF1R78" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry4-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/LKrZv8JUpFjBF1R78</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 5 (港島跑) -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry3-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry3-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry3-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry3-weather" title="天氣 Emoji">🌙</span>
+            <span class="entry-temp editable" id="entry3-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry3-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry3-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry3-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry3-link" href="https://photos.app.goo.gl/h9dGLoBhYjvrdGf8A" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry3-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/h9dGLoBhYjvrdGf8A</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 3A -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry3a-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry3a-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry3a-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry3a-weather" title="天氣 Emoji">☀️</span>
+            <span class="entry-temp editable" id="entry3a-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry3a-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry3a-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry3a-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry3a-link" href="https://photos.app.goo.gl/Z174JgEbvkEgJbh99" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry3a-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/Z174JgEbvkEgJbh99</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 8 (原 entry5) -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry5-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry5-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry5-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry5-weather" title="天氣 Emoji">🌧️</span>
+            <span class="entry-temp editable" id="entry5-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry5-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry5-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry5-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry5-link" href="https://photos.app.goo.gl/RJzt4azd1A1X64MM8" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry5-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/RJzt4azd1A1X64MM8</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 9 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry9-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry9-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry9-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry9-weather" title="天氣 Emoji">☀️</span>
+            <span class="entry-temp editable" id="entry9-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry9-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry9-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry9-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry9-link" href="https://photos.app.goo.gl/oJ7Geqihnr8ZrDpL7" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry9-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/oJ7Geqihnr8ZrDpL7</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 10 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry10-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry10-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry10-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry10-weather" title="天氣 Emoji">🌤️</span>
+            <span class="entry-temp editable" id="entry10-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry10-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry10-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry10-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry10-link" href="https://photos.app.goo.gl/r77Hy5U61mje1bg79" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry10-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/r77Hy5U61mje1bg79</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 11 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry11-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry11-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry11-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry11-weather" title="天氣 Emoji">⛅</span>
+            <span class="entry-temp editable" id="entry11-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry11-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry11-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry11-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry11-link" href="https://photos.app.goo.gl/yABafAhHY5oZUWoX9" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry11-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/yABafAhHY5oZUWoX9</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 12 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry12-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry12-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry12-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry12-weather" title="天氣 Emoji">🌧️</span>
+            <span class="entry-temp editable" id="entry12-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry12-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry12-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry12-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry12-link" href="https://photos.app.goo.gl/Pi5DJxDuR6utggBJA" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry12-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/Pi5DJxDuR6utggBJA</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 15 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry15-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry15-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry15-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry15-weather" title="天氣 Emoji">☀️</span>
+            <span class="entry-temp editable" id="entry15-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry15-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry15-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry15-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry15-link" href="https://photos.app.goo.gl/ELQcmHMD6C2vcYaY7" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry15-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/ELQcmHMD6C2vcYaY7</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 16 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry16-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry16-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry16-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry16-weather" title="天氣 Emoji">🌤️</span>
+            <span class="entry-temp editable" id="entry16-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry16-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry16-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry16-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry16-link" href="https://photos.app.goo.gl/4iu4ni5ohcLfAs4x9" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry16-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/4iu4ni5ohcLfAs4x9</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 17 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry17-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry17-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry17-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry17-weather" title="天氣 Emoji">⛅</span>
+            <span class="entry-temp editable" id="entry17-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry17-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry17-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry17-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry17-link" href="https://photos.app.goo.gl/u9Bo83MhxDtAvAHW9" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry17-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/u9Bo83MhxDtAvAHW9</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 18 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry18-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry18-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry18-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry18-weather" title="天氣 Emoji">☀️</span>
+            <span class="entry-temp editable" id="entry18-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry18-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry18-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry18-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry18-link" href="https://photos.app.goo.gl/St8LwVBBTaVPTStL6" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry18-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/St8LwVBBTaVPTStL6</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 19 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry19-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry19-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry19-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry19-weather" title="天氣 Emoji">🌤️</span>
+            <span class="entry-temp editable" id="entry19-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry19-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry19-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry19-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry19-link" href="https://photos.app.goo.gl/PQh8ScHZZmHzVsjC6" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry19-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/PQh8ScHZZmHzVsjC6</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 20 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry20-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry20-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry20-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry20-weather" title="天氣 Emoji">⛅</span>
+            <span class="entry-temp editable" id="entry20-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry20-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry20-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry20-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry20-link" href="https://photos.app.goo.gl/3qd8NEvFQtqhcdgw9" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry20-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/3qd8NEvFQtqhcdgw9</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 21 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry21-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry21-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry21-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry21-weather" title="天氣 Emoji">🌤️</span>
+            <span class="entry-temp editable" id="entry21-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry21-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry21-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry21-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry21-link" href="https://photos.app.goo.gl/RxSDArZRSBgfD5N16" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry21-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/RxSDArZRSBgfD5N16</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 22 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry22-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry22-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry22-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry22-weather" title="天氣 Emoji">☀️</span>
+            <span class="entry-temp editable" id="entry22-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry22-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry22-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry22-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry22-link" href="https://photos.app.goo.gl/1TPP8br6HqfddWQe6" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry22-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/1TPP8br6HqfddWQe6</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 23 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry23-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry23-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry23-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry23-weather" title="天氣 Emoji">🌧️</span>
+            <span class="entry-temp editable" id="entry23-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry23-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry23-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry23-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry23-link" href="https://photos.app.goo.gl/8mvFgpoCN9mjE7Qj7" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry23-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/8mvFgpoCN9mjE7Qj7</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 24 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry24-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry24-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry24-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry24-weather" title="天氣 Emoji">⛅</span>
+            <span class="entry-temp editable" id="entry24-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry24-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry24-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry24-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry24-link" href="https://photos.app.goo.gl/LW89WyyTgmcWufuw7" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry24-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/LW89WyyTgmcWufuw7</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 25 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry25-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry25-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry25-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry25-weather" title="天氣 Emoji">☀️</span>
+            <span class="entry-temp editable" id="entry25-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry25-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry25-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry25-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry25-link" href="https://photos.app.goo.gl/Ch5U2mGX1LJDfQrq9" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry25-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/Ch5U2mGX1LJDfQrq9</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 26 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry26-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry26-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry26-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry26-weather" title="天氣 Emoji">🌧️</span>
+            <span class="entry-temp editable" id="entry26-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry26-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry26-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry26-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry26-link" href="https://photos.app.goo.gl/xzfPWZruMxNUE6Fz8" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry26-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/xzfPWZruMxNUE6Fz8</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 27 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry27-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry27-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry27-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry27-weather" title="天氣 Emoji">🌙</span>
+            <span class="entry-temp editable" id="entry27-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry27-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry27-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry27-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry27-link" href="https://photos.app.goo.gl/DTpkwSgFHvmrLEEM8" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry27-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/DTpkwSgFHvmrLEEM8</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 28 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry28-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry28-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry28-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry28-weather" title="天氣 Emoji">🌤️</span>
+            <span class="entry-temp editable" id="entry28-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry28-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry28-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry28-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry28-link" href="https://photos.app.goo.gl/gTUDWDxao82H9n729" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry28-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/gTUDWDxao82H9n729</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 29 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry29-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry29-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry29-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry29-weather" title="天氣 Emoji">☀️</span>
+            <span class="entry-temp editable" id="entry29-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry29-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry29-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry29-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry29-link" href="https://photos.app.goo.gl/aHB8L7VyRDfkPAVy6" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry29-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/aHB8L7VyRDfkPAVy6</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 30 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry30-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry30-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry30-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry30-weather" title="天氣 Emoji">🌧️</span>
+            <span class="entry-temp editable" id="entry30-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry30-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry30-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry30-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry30-link" href="https://photos.app.goo.gl/ZHGyo9wfPStj7xR89" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry30-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/ZHGyo9wfPStj7xR89</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 31 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry31-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry31-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry31-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry31-weather" title="天氣 Emoji">🌙</span>
+            <span class="entry-temp editable" id="entry31-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry31-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry31-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry31-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry31-link" href="https://photos.app.goo.gl/fXdExvcTrVg4KPM49" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry31-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/fXdExvcTrVg4KPM49</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 32 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry32-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry32-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry32-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry32-weather" title="天氣 Emoji">🌤️</span>
+            <span class="entry-temp editable" id="entry32-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry32-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry32-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry32-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry32-link" href="https://photos.app.goo.gl/mbeqipks6Emduhvz9" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry32-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/mbeqipks6Emduhvz9</p>
+        </div>
+      </div>
+
+      <!-- 範例日誌卡片 33 -->
+      <div class="journal-entry">
+        <div class="entry-meta">
+          <img class="entry-avatar img-clickable" id="entry33-avatar" src="https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/entry33-avatar" alt="活動合照" title="點擊上傳活動合照">
+          <div class="entry-meta-info">
+            <span class="entry-date editable" id="entry33-date">📅 2026.??.??</span>
+            <span class="entry-weather editable" id="entry33-weather" title="天氣 Emoji">☀️</span>
+            <span class="entry-temp editable" id="entry33-temp" title="溫度">??°C</span>
+          </div>
+        </div>
+        <div class="entry-card">
+          <div class="entry-header">
+            <h3 class="entry-title editable" id="entry33-title">🏃 待填寫活動名稱</h3>
+            <span class="entry-location editable" id="entry33-location">📍 待填寫地點</span>
+          </div>
+          <p class="entry-desc editable" id="entry33-desc">點擊此處編輯活動描述...</p>
+          <a class="entry-link" id="entry33-link" href="https://photos.app.goo.gl/RdHDFv5eNpta9hA79" target="_blank">📷 查看相片與影片</a>
+          <p class="entry-link-edit editable" id="entry33-link-text" style="margin-top:8px;font-size:12px;color:var(--text-muted);">連結：https://photos.app.goo.gl/RdHDFv5eNpta9hA79</p>
+        </div>
+      </div>
+
+
+      <!-- 新增更多日誌提示 -->
+      <div class="journal-add-hint">
+        <p>✨ 想新增更多活動記錄？點擊上方範例卡片即可編輯，或聯絡我們幫你添加模板。</p>
+      </div>
     </div>
   </section>
 
-  <!-- Video Section -->
-  <section id="video">
-    <div class="section-label">VIDEO</div>
-    <h2 class="section-title">團隊影片</h2>
-    <div class="video-container">
-      <video id="team-video" controls>
-        <source id="video-source" src="" type="video/mp4">
-        你的瀏覽器不支援影片播放
-      </video>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <div class="footer-brand" id="footer-brand">鋼鐵鎂</div>
-    <p class="footer-slogan" id="footer-slogan">踏出，鋼鐵意志</p>
-    <p id="footer-sub">彼此扶持 互相勉勵 熱愛不滅 步履不停 快樂奔跑</p>
+  <!-- FOOTER -->
+  <footer id="contact">
+    <p>
+      <span class="brand editable" id="footer-brand">
+        <span class="first">鋼</span><span class="accent">鐵</span><span class="last">鎂</span>
+      </span>
+      <span class="sub editable" id="footer-sub">Steel Mag Running Club</span>
+    </p>
   </footer>
 
+  <!-- Hidden file input -->
+  <input type="file" id="smg-file-input" accept="image/*" style="display:none">
+  <input type="file" id="smg-video-input" accept="video/*" style="display:none">
+
+  <!-- SCRIPTS - IndexedDB 版本 -->
   <script>
-    // ===== 從 GitHub 載入資料 =====
-    const GITHUB_RAW = 'https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/';
-    
-    async function loadData() {
-      try {
-        const response = await fetch(GITHUB_RAW + 'data.json');
-        const data = await response.json();
-        
-        // 圖片 URL 映射
-        const imageUrls = data.__image_urls || {};
-        const funrunUrls = data.__funrun_urls || {};
-        
-        // ===== 填充基本文字 =====
-        document.getElementById('nav-text').textContent = data['text_nav-text'] || '鋼鐵鎂';
-        document.getElementById('hero-t1').textContent = data['text_hero-t1'] || '鋼';
-        document.getElementById('hero-t2').textContent = data['text_hero-t2'] || '鎂';
-        document.getElementById('hero-sub').textContent = data['text_hero-sub'] || '';
-        document.getElementById('hero-badge').textContent = data['text_hero-badge'] || '';
-        
-        document.getElementById('about-label').textContent = data['text_about-label'] || 'ABOUT US';
-        document.getElementById('about-title').innerHTML = (data['text_about-title'] || '').replace(/\n/g, '<br>');
-        document.getElementById('about-p1').textContent = data['text_about-p1'] || '';
-        document.getElementById('about-p2').textContent = data['text_about-p2'] || '';
-        
-        document.getElementById('team-photo-img').src = imageUrls['team-photo.jpg'] || imageUrls['team-photo'] || '';
-        document.getElementById('team-caption').textContent = data['text_team-caption'] || '';
-        
-        document.getElementById('members-label').textContent = data['text_members-label'] || 'METALS';
-        document.getElementById('members-title').textContent = data['text_members-title'] || '認識金屬';
-        
-        document.getElementById('funrun-label').textContent = data['text_funrun-label'] || 'FUN RUN';
-        
-        document.getElementById('journal-label').textContent = data['text_journal-label'] || 'JOURNAL';
-        document.getElementById('journal-title').textContent = data['text_journal-title'] || '活動日誌';
-        document.getElementById('journal-intro').textContent = data['text_journal-intro'] || '';
-        
-        document.getElementById('footer-brand').textContent = data['text_footer-brand'] || '鋼鐵鎂';
-        document.getElementById('footer-slogan').textContent = data['text_footer-slogan'] || '';
-        document.getElementById('footer-sub').textContent = data['text_footer-sub'] || '';
-        
-        // ===== 導航 Logo =====
-        document.getElementById('nav-logo').src = imageUrls['nav-logo.jpg'] || imageUrls['nav-logo.png'] || imageUrls['logo.jpg'] || '';
-        
-        // ===== 成員卡片 =====
-        const members = ['ak', 'gang', 'juan', 'lu', 'ngan', 'sa', 'san', 'tung'];
-        const membersGrid = document.getElementById('members-grid');
-        membersGrid.innerHTML = '';
-        
-        members.forEach(m => {
-          const name = data[`text_${m}-name`] || '';
-          const title = data[`text_${m}-title`] || '';
-          const tag1 = data[`text_${m}-tag1`] || '';
-          const tag2 = data[`text_${m}-tag2`] || '';
-          const avatar = imageUrls[`${m}-avatar.jpg`] || imageUrls[`${m}-avatar`] || '';
-          const logo = imageUrls[`${m}-logo.jpg`] || imageUrls[`${m}-logo`] || '';
-          
-          if (name) {
-            const card = document.createElement('div');
-            card.className = 'member-card';
-            card.innerHTML = `
-              <img class="member-avatar" src="${avatar}" alt="${name}" onerror="this.style.display='none'">
-              <img class="member-logo" src="${logo}" alt="logo" onerror="this.style.display='none'">
-              <div class="member-name">${name}</div>
-              <div class="member-title">${title}</div>
-              <div class="member-tags">
-                <span class="member-tag">${tag1}</span>
-                <span class="member-tag">${tag2}</span>
-              </div>
-            `;
-            membersGrid.appendChild(card);
+    var SMG = {
+      DB_NAME: 'SteelMagDB',
+      DB_VERSION: 1,
+      STORE_DATA: 'data',
+      currentUploadTarget: null,
+      db: null,
+
+      // 初始化 IndexedDB
+      init: function() {
+        var self = this;
+        var request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
+
+        request.onerror = function() {
+          console.error('IndexedDB 初始化失敗');
+          alert('數據庫初始化失敗，部分功能可能不正常');
+        };
+
+        request.onsuccess = function(e) {
+          self.db = e.target.result;
+          self.restoreAll();
+          // 檢查管理員登入狀態
+          if (sessionStorage.getItem('smg_admin') === 'true') {
+            document.getElementById('admin-bar').classList.add('visible');
+          } else {
+            document.getElementById('admin-login-btn').style.display = 'block';
+          }
+          self.setupEditMode();
+          self.setupImageUpload();
+          self.initEmojiReactions();
+          self.initImageDragZoom();
+          self.setupVideoUpload();
+          self.setupBackup();
+          self.setupVideoVolume();
+          self.setupPhotoResize();
+          self.initUpcoming();
+          self.initFunRun();
+          self.initFunRunDragDrop(); // 初始化拖曳排序
+          // 自動讀取 backup 檔
+          self.autoLoadBackup();
+          self.showStatus('✅ 系統就緒');
+        };
+
+        request.onupgradeneeded = function(e) {
+          var db = e.target.result;
+          if (!db.objectStoreNames.contains(self.STORE_DATA)) {
+            db.createObjectStore(self.STORE_DATA, { keyPath: 'key' });
+          }
+        };
+      },
+
+      // 保存數據到 IndexedDB
+      dbSet: function(key, value, callback) {
+        if (!this.db) { callback && callback(); return; }
+        var self = this;
+        var tx = this.db.transaction(this.STORE_DATA, 'readwrite');
+        var store = tx.objectStore(this.STORE_DATA);
+        store.put({ key: key, value: value });
+        tx.oncomplete = function() { callback && callback(true); };
+        tx.onerror = function() { callback && callback(false); };
+      },
+
+      // 讀取 IndexedDB 數據
+      dbGet: function(key, callback) {
+        if (!this.db) { callback(null); return; }
+        var tx = this.db.transaction(this.STORE_DATA, 'readonly');
+        var store = tx.objectStore(this.STORE_DATA);
+        var req = store.get(key);
+        req.onsuccess = function() { callback(req.result ? req.result.value : null); };
+        req.onerror = function() { callback(null); };
+      },
+
+      // 讀取所有 IndexedDB 數據
+      dbGetAll: function(callback) {
+        if (!this.db) { callback({}); return; }
+        var tx = this.db.transaction(this.STORE_DATA, 'readonly');
+        var store = tx.objectStore(this.STORE_DATA);
+        var req = store.getAll();
+        req.onsuccess = function() {
+          var result = {};
+          (req.result || []).forEach(function(item) { result[item.key] = item.value; });
+          callback(result);
+        };
+        req.onerror = function() { callback({}); };
+      },
+
+      // 刪除 IndexedDB 數據
+      dbDelete: function(key, callback) {
+        if (!this.db) { callback && callback(false); return; }
+        var self = this;
+        var tx = this.db.transaction(this.STORE_DATA, 'readwrite');
+        var store = tx.objectStore(this.STORE_DATA);
+        store.delete(key);
+        tx.oncomplete = function() { callback && callback(true); };
+        tx.onerror = function() { callback && callback(false); };
+      },
+
+      // 恢復所有數據
+      restoreAll: function() {
+        var self = this;
+        this.dbGetAll(function(allData) {
+          // 恢復圖片
+          document.querySelectorAll('img[id]').forEach(function(el) {
+            var key = 'img_' + el.id;
+            if (allData[key]) el.src = allData[key];
+          });
+          // 恢復視頻
+          var video = document.getElementById('team-video');
+          var videoPlaceholder = document.getElementById('team-video-placeholder');
+          var volumeControl = document.getElementById('video-volume-control');
+          if (video && allData['video_team-video']) {
+            video.src = allData['video_team-video'];
+            video.style.display = 'block';
+            if (videoPlaceholder) videoPlaceholder.style.display = 'none';
+            if (volumeControl) {
+              volumeControl.style.display = 'flex';
+            }
+          }
+          // 恢復文字（排除 about-title 保持格式）
+          document.querySelectorAll('.editable[id]').forEach(function(el) {
+            if (el.id === 'about-title') return; // 跳過，保持原始格式
+            var key = 'text_' + el.id;
+            if (allData[key]) el.innerHTML = allData[key];
+          });
+        });
+      },
+
+      // 自動讀取 backup 檔案
+      autoLoadBackup: function() {
+        var self = this;
+        fetch('latest-backup.json')
+          .then(function(response) { return response.json(); })
+          .then(function(data) {
+            var count = 0;
+            var total = Object.keys(data).length;
+            if (total === 0) return;
+
+            for (var key in data) {
+              self.dbSet(key, data[key], function(success) {
+                count++;
+                if (success) {
+                  if (key.startsWith('img_')) {
+                    var imgId = key.replace('img_', '');
+                    var img = document.getElementById(imgId);
+                    if (img) img.src = data[key];
+                  } else if (key.startsWith('video_')) {
+                    var videoId = key.replace('video_', '');
+                    var video = document.getElementById(videoId);
+                    var placeholder = document.getElementById(videoId.replace('-', '-') + '-placeholder') || document.getElementById('team-video-placeholder');
+                    var volumeControl = document.getElementById('video-volume-control');
+                    if (video) {
+                      video.src = data[key];
+                      video.style.display = 'block';
+                      if (placeholder) placeholder.style.display = 'none';
+                      if (volumeControl) {
+                        volumeControl.style.display = 'flex';
+                      }
+                    }
+                  } else if (key.startsWith('text_')) {
+                    var elId = key.replace('text_', '');
+                    var el = document.getElementById(elId);
+                    if (el && elId !== 'about-title') el.innerHTML = data[key];
+                  }
+                }
+                if (count === total) {
+                  self.showStatus('✅ 已自動恢復 ' + total + ' 項內容');
+                }
+              });
+            }
+          })
+          .catch(function(err) {
+            // 冇 backup 檔，唔顯示錯誤
+          });
+      },
+
+      // 設置編輯模式
+      setupEditMode: function() {
+        var self = this;
+
+        document.querySelectorAll('.editable').forEach(function(el) {
+          el.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (this.querySelector('input')) return;
+            self.editText(this);
+          });
+        });
+      },
+
+      // 編輯文字
+      editText: function(el) {
+        if (el.querySelector('input')) return;
+        if (!el.id) return;
+
+        var self = this;
+        var currentText = el.innerText || el.textContent || '';
+        var originalText = currentText;
+
+        // 標記為編輯中
+        el.classList.add('editing');
+
+        // 創建 input
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.value = currentText;
+        input.style.cssText = 'font:inherit;letter-spacing:inherit;background:rgba(245,166,35,0.25);border:3px solid #f5a623;border-radius:8px;padding:10px 16px;color:#fff;width:90%;outline:none;font-size:inherit;font-weight:inherit;text-align:inherit;box-shadow:0 0 20px rgba(245,166,35,0.3);';
+
+        // 事件阻止
+        input.addEventListener('click', function(e) { e.stopPropagation(); });
+        input.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+
+        // 完成編輯
+        var finish = function() {
+          el.classList.remove('editing');
+          var newText = input.value.trim() || originalText;
+          el.innerHTML = newText;
+          // 保存到 IndexedDB
+          self.dbSet('text_' + el.id, newText, function(success) {
+            if (success) self.showStatus('✅ 已保存');
+          });
+        };
+
+        input.addEventListener('blur', function() {
+          setTimeout(finish, 100);
+        });
+
+        input.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+          if (e.key === 'Escape') {
+            el.classList.remove('editing');
+            el.innerHTML = originalText;
           }
         });
-        
-        // ===== Fun Run 滾筒 =====
-        initFunRunCarousel(funrunUrls, data.funrun_hidden_github);
-        
-        // ===== 活動日誌 =====
-        initJournal(data);
-        
-        // ===== 團隊影片 =====
-        const videoSrc = imageUrls['team-video.mp4'] || imageUrls['video_team-video'] || '';
-        if (videoSrc && !videoSrc.startsWith('data:')) {
-          document.getElementById('video-source').src = videoSrc;
-          document.getElementById('team-video').load();
+
+        // 替換內容
+        el.innerHTML = '';
+        el.appendChild(input);
+        setTimeout(function() { input.focus(); input.select(); }, 50);
+      },
+
+      // 設置圖片上傳
+      setupImageUpload: function() {
+        var self = this;
+        var fileInput = document.getElementById('smg-file-input');
+
+        document.querySelectorAll('.img-clickable').forEach(function(img) {
+          img.addEventListener('click', function() {
+            self.currentUploadTarget = this.id;
+            fileInput.click();
+          });
+        });
+
+        fileInput.addEventListener('change', function() {
+          var file = fileInput.files[0];
+          if (!file || !self.currentUploadTarget) return;
+
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            var img = new Image();
+            img.onload = function() {
+              // 壓縮大圖片
+              var maxSize = 800;
+              var canvas = document.createElement('canvas');
+              var ratio = Math.min(maxSize / img.width, maxSize / img.height, 1);
+              canvas.width = img.width * ratio;
+              canvas.height = img.height * ratio;
+              var ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              var compressed = canvas.toDataURL('image/jpeg', 0.85);
+
+              var target = document.getElementById(self.currentUploadTarget);
+              if (target) {
+                target.src = compressed;
+                target.style.transform = 'none';
+                localStorage.removeItem('smg_pos_' + self.currentUploadTarget);
+                // 保存到 IndexedDB
+                self.dbSet('img_' + self.currentUploadTarget, compressed, function(success) {
+                  if (success) self.showStatus('✅ 圖片已保存');
+                });
+              }
+            };
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+          fileInput.value = '';
+        });
+      },
+
+      // 設置視頻上傳
+      setupVideoUpload: function() {
+        var self = this;
+        var videoInput = document.getElementById('smg-video-input');
+        var video = document.getElementById('team-video');
+        var placeholder = document.getElementById('team-video-placeholder');
+
+        // 點擊視頻或佔位符上傳
+        if (video) {
+          video.addEventListener('click', function() {
+            videoInput.click();
+          });
         }
-        
-        document.title = (data['text_nav-text'] || '鋼鐵鎂') + ' — Steel Mag';
-        
-      } catch (error) {
-        console.error('載入資料失敗:', error);
-        document.body.innerHTML = '<div class="loading" style="min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;"><p style="color:var(--text-muted);">載入資料失敗</p><p style="color:var(--text-muted);font-size:14px;">請檢查網絡連接</p></div>';
+        if (placeholder) {
+          placeholder.addEventListener('click', function() {
+            videoInput.click();
+          });
+        }
+
+        videoInput.addEventListener('change', function() {
+          var file = videoInput.files[0];
+          if (!file) return;
+
+          // 檢查文件大小（限制 50MB）
+          if (file.size > 50 * 1024 * 1024) {
+            alert('⚠️ 視頻太大，請選擇 50MB 以下的視頻');
+            videoInput.value = '';
+            return;
+          }
+
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            var videoBlob = e.target.result;
+
+            // 顯示視頻
+            video.src = videoBlob;
+            video.style.display = 'block';
+            if (placeholder) placeholder.style.display = 'none';
+
+            // 顯示音量控制（固定喺視頻正下方）
+            var volumeControl = document.getElementById('video-volume-control');
+            if (volumeControl) {
+              volumeControl.style.display = 'flex';
+            }
+
+            // 保存到 IndexedDB
+            self.dbSet('video_team-video', videoBlob, function(success) {
+              if (success) {
+                self.showStatus('✅ 視頻已保存');
+              } else {
+                self.showStatus('⚠️ 視頻保存失敗，請嘗試較小的視頻');
+              }
+            });
+          };
+          reader.readAsDataURL(file);
+          videoInput.value = '';
+        });
+      },
+
+      // 設置視頻聲音按鈕
+      setupVideoMuteBtn: function() {
+        var muteBtn = document.getElementById('video-mute-btn');
+        var video = document.getElementById('team-video');
+        if (!muteBtn || !video) return;
+
+        muteBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          video.muted = !video.muted;
+          if (video.muted) {
+            muteBtn.innerHTML = '🔇';
+            muteBtn.title = '點擊開啟聲音';
+          } else {
+            muteBtn.innerHTML = '🔊';
+            muteBtn.title = '點擊靜音';
+          }
+        });
+      },
+
+      // 設置團體照調整大小功能（獨立X/Y軸）
+      setupPhotoResize: function() {
+        var wrapper = document.getElementById('team-photo-wrapper');
+        if (!wrapper) return;
+        var handles = wrapper.querySelectorAll('.photo-resize-handle');
+        var isResizing = false, currentHandle = null, startX, startY, startW, startH;
+
+        // 讀取保存的尺寸
+        var savedSize = localStorage.getItem('smg_teamphoto_size');
+        if (savedSize) {
+          try {
+            var size = JSON.parse(savedSize);
+            wrapper.style.width = size.w + 'px';
+            wrapper.style.height = size.h + 'px';
+          } catch(e) {}
+        }
+
+        handles.forEach(function(h) {
+          h.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            isResizing = true;
+            currentHandle = h;
+            startX = e.clientX;
+            startY = e.clientY;
+            startW = wrapper.offsetWidth;
+            startH = wrapper.offsetHeight;
+          });
+        });
+
+        document.addEventListener('mousemove', function(e) {
+          if (!isResizing || !currentHandle) return;
+          e.preventDefault();
+          var dx = e.clientX - startX;
+          var dy = e.clientY - startY;
+          var dir = currentHandle.dataset.dir;
+          var newW = startW, newH = startH;
+          // 獨立調整寬度（不受高度影響）
+          if (dir.includes('e')) newW = startW + dx;
+          if (dir.includes('w')) newW = startW - dx;
+          // 獨立調整高度（不受寬度影響）
+          if (dir.includes('s')) newH = startH + dy;
+          if (dir.includes('n')) newH = startH - dy;
+          newW = Math.max(200, Math.min(700, newW));
+          newH = Math.max(300, Math.min(900, newH));
+          wrapper.style.width = newW + 'px';
+          wrapper.style.height = newH + 'px';
+        });
+
+        document.addEventListener('mouseup', function() {
+          if (isResizing) {
+            isResizing = false;
+            currentHandle = null;
+            // 保存尺寸到 localStorage
+            localStorage.setItem('smg_teamphoto_size', JSON.stringify({
+              w: wrapper.offsetWidth,
+              h: wrapper.offsetHeight
+            }));
+          }
+        });
+      },
+
+      // 設置音量控制條（固定喺視頻正下方）
+      setupVideoVolume: function() {
+        var video = document.getElementById('team-video');
+        var volumeSlider = document.getElementById('video-volume');
+        var volumeIcon = document.getElementById('volume-icon');
+        var volumeLabel = document.getElementById('volume-label');
+        var volumeControl = document.getElementById('video-volume-control');
+        if (!video || !volumeSlider) return;
+
+        // 初始化音量
+        video.volume = 0.3;
+        var lastVolume = 30;
+
+        // 音量條拖動
+        volumeSlider.addEventListener('input', function(e) {
+          e.stopPropagation();
+          var vol = this.value / 100;
+          video.volume = vol;
+          video.muted = false;
+          volumeLabel.textContent = this.value + '%';
+          if (vol === 0) {
+            volumeIcon.textContent = '🔇';
+          } else if (vol < 0.5) {
+            volumeIcon.textContent = '🔉';
+          } else {
+            volumeIcon.textContent = '🔊';
+          }
+          lastVolume = parseInt(this.value);
+        });
+
+        // 點擊圖標切換靜音
+        volumeIcon.addEventListener('click', function(e) {
+          e.stopPropagation();
+          if (video.muted || video.volume === 0) {
+            video.muted = false;
+            video.volume = lastVolume / 100;
+            volumeSlider.value = lastVolume;
+            volumeLabel.textContent = lastVolume + '%';
+          } else {
+            lastVolume = Math.round(video.volume * 100);
+            video.muted = true;
+            volumeSlider.value = 0;
+            volumeLabel.textContent = '0%';
+          }
+          if (video.muted || video.volume === 0) {
+            volumeIcon.textContent = '🔇';
+          } else if (video.volume < 0.5) {
+            volumeIcon.textContent = '🔉';
+          } else {
+            volumeIcon.textContent = '🔊';
+          }
+        });
+      },
+
+
+
+
+
+
+
+      // 初始化 Emoji Reactions
+      initEmojiReactions: function() {
+        var emojis = ['👍', '❤️', '👏', '😂', '🙏', '🎉', '💪', '🏃', '😎', '🍻'];
+        var self = this;
+
+        document.querySelectorAll('.entry-link[id]').forEach(function(link) {
+          var entryId = link.id.replace('-link', '');
+          var wrapper = document.createElement('div');
+          wrapper.className = 'emoji-reactions';
+          wrapper.id = entryId + '-reactions';
+
+          emojis.forEach(function(emoji) {
+            var btn = document.createElement('button');
+            btn.className = 'emoji-btn';
+            btn.dataset.emoji = emoji;
+            btn.dataset.entry = entryId;
+            btn.innerHTML = emoji + ' <span class="emoji-count">0</span>';
+            wrapper.appendChild(btn);
+          });
+
+          link.parentNode.insertBefore(wrapper, link.nextSibling);
+        });
+
+        // 讀取並顯示已保存的反應
+        emojis.forEach(function(emoji) {
+          document.querySelectorAll('.emoji-btn[data-emoji="' + emoji + '"]').forEach(function(btn) {
+            var entryId = btn.dataset.entry;
+            var key = 'rxn_' + entryId + '_' + emoji;
+            var saved = localStorage.getItem(key);
+            if (saved) {
+              btn.querySelector('.emoji-count').textContent = saved;
+            }
+          });
+        });
+
+        // 處理點擊
+        document.addEventListener('click', function(e) {
+          if (!e.target.classList.contains('emoji-btn')) return;
+          var btn = e.target.closest('.emoji-btn');
+          var emoji = btn.dataset.emoji;
+          var entryId = btn.dataset.entry;
+          var countEl = btn.querySelector('.emoji-count');
+          var count = parseInt(countEl.textContent) || 0;
+
+          if (btn.classList.contains('active')) {
+            count--;
+            btn.classList.remove('active');
+          } else {
+            count++;
+            btn.classList.add('active');
+          }
+
+          count = Math.max(0, count);
+          countEl.textContent = count;
+          localStorage.setItem('rxn_' + entryId + '_' + emoji, count);
+        });
+      },
+
+      // 初始化圖片拖拽和縮放
+      initImageDragZoom: function() {
+        var self = this;
+        var state = {}; // imgId -> {x, y, s}
+
+        // 讀取所有保存的狀態
+        document.querySelectorAll('.img-clickable').forEach(function(img) {
+          var id = img.id;
+          if (!id) return;
+          var saved = localStorage.getItem('smg_pos_' + id);
+          if (saved) {
+            state[id] = JSON.parse(saved);
+            img.style.transformOrigin = 'center center';
+            img.style.transform = 'translate(' + state[id].x + 'px, ' + state[id].y + 'px) scale(' + state[id].s + ')';
+          } else {
+            state[id] = {x: 0, y: 0, s: 1};
+          }
+        });
+
+        var dragging = null, dragStartX, dragStartY, dragStartX2, dragStartY2;
+
+        document.addEventListener('mousedown', function(e) {
+          if (!e.target.classList.contains('img-clickable')) return;
+          e.preventDefault();
+          dragging = e.target;
+          var id = dragging.id;
+          dragStartX = e.clientX;
+          dragStartY = e.clientY;
+          dragStartX2 = state[id] ? state[id].x : 0;
+          dragStartY2 = state[id] ? state[id].y : 0;
+          dragging.classList.add('drag-mode');
+        });
+
+        document.addEventListener('mousemove', function(e) {
+          if (!dragging) return;
+          var id = dragging.id;
+          var dx = e.clientX - dragStartX;
+          var dy = e.clientY - dragStartY;
+          var s = state[id].s;
+          dragging.style.transform = 'translate(' + (dragStartX2 + dx) + 'px, ' + (dragStartY2 + dy) + 'px) scale(' + s + ')';
+        });
+
+        document.addEventListener('mouseup', function() {
+          if (dragging) {
+            var id = dragging.id;
+            var t = dragging.style.transform;
+            var match = t.match(/translate\(([^,]+)px,\s*([^)]+)px\)\s*scale\(([^)]+)\)/);
+            if (match) {
+              state[id] = {x: parseFloat(match[1]), y: parseFloat(match[2]), s: parseFloat(match[3])};
+              localStorage.setItem('smg_pos_' + id, JSON.stringify(state[id]));
+            }
+            dragging.classList.remove('drag-mode');
+            dragging = null;
+          }
+        });
+
+        // 滾輪縮放
+        document.addEventListener('wheel', function(e) {
+          var img = e.target.closest('.img-clickable');
+          if (!img) return;
+          e.preventDefault();
+          var id = img.id;
+          var s = state[id].s * (e.deltaY > 0 ? 0.9 : 1.1);
+          s = Math.max(0.3, Math.min(3, s));
+          state[id].s = s;
+          img.style.transform = 'translate(' + state[id].x + 'px, ' + state[id].y + 'px) scale(' + s + ')';
+          localStorage.setItem('smg_pos_' + id, JSON.stringify(state[id]));
+        }, {passive: false});
+      },
+
+      // 設置備份功能
+      setupBackup: function() {
+        var self = this;
+        document.getElementById('import-file').addEventListener('change', function(e) {
+          var file = e.target.files[0];
+          if (!file) return;
+          self.importData(file);
+          e.target.value = '';
+        });
+      },
+
+      // 手動保存所有
+      saveAll: function() {
+        var self = this;
+        var count = 0;
+        var total = 0;
+
+        // 保存所有文字
+        document.querySelectorAll('.editable[id]').forEach(function(el) {
+          total++;
+          var text = el.innerText || el.textContent || el.innerHTML;
+          self.dbSet('text_' + el.id, text, function() {
+            count++;
+            if (count === total) self.showStatus('💾 已儲存 ' + count + ' 項內容');
+          });
+        });
+
+        if (total === 0) this.showStatus('✅ 無內容需保存');
+      },
+
+      // 導出數據
+      exportData: function() {
+        var self = this;
+        this.dbGetAll(function(allData) {
+          var json = JSON.stringify(allData, null, 2);
+          var blob = new Blob([json], { type: 'application/json' });
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = 'steel-mag-backup-' + new Date().toISOString().slice(0,10) + '.json';
+          a.click();
+          URL.revokeObjectURL(url);
+          self.showStatus('✅ 備份已下載');
+        });
+      },
+
+      // 導入數據
+      importData: function(file) {
+        var self = this;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            var data = JSON.parse(e.target.result);
+            var count = 0;
+            var total = Object.keys(data).length;
+
+            for (var key in data) {
+              self.dbSet(key, data[key], function(success) {
+                count++;
+                if (success) {
+                  // 更新頁面顯示
+                  if (key.startsWith('img_')) {
+                    var imgId = key.replace('img_', '');
+                    var img = document.getElementById(imgId);
+                    if (img) img.src = data[key];
+                  } else if (key.startsWith('video_')) {
+                    var videoId = key.replace('video_', '');
+                    var video = document.getElementById(videoId);
+                    var placeholder = document.getElementById('team-video-placeholder');
+                    var volumeControl = document.getElementById('video-volume-control');
+                    if (video) {
+                      video.src = data[key];
+                      video.style.display = 'block';
+                      if (placeholder) placeholder.style.display = 'none';
+                      if (volumeControl) {
+                        volumeControl.style.display = 'flex';
+                      }
+                    }
+                  } else if (key.startsWith('text_')) {
+                    var elId = key.replace('text_', '');
+                    var el = document.getElementById(elId);
+                    if (el && elId !== 'about-title') el.innerHTML = data[key];
+                  }
+                }
+                if (count === total) {
+                  self.showStatus('✅ 已恢復 ' + total + ' 項內容，頁面將自動重新整理…');
+                  setTimeout(function() { location.reload(); }, 1200);
+                }
+              });
+            }
+          } catch(err) {
+            alert('❌ 恢復失敗：' + err.message);
+          }
+        };
+        reader.readAsText(file);
+      },
+
+      // 管理員登入（主admin bar）
+      adminLogin: function() {
+        var password = prompt('請輸入管理員密碼：');
+        if (password === 'smg2026') {
+          sessionStorage.setItem('smg_admin', 'true');
+          document.getElementById('admin-bar').classList.add('visible');
+          document.getElementById('admin-login-btn').style.display = 'none';
+          this.showStatus('✅ 已進入編輯模式');
+        } else if (password !== null) {
+          alert('密碼錯誤！');
+        }
+      },
+
+      // 管理員登出
+      adminLogout: function() {
+        sessionStorage.removeItem('smg_admin');
+        document.getElementById('admin-bar').classList.remove('visible');
+        document.getElementById('admin-login-btn').style.display = 'block';
+        this.showStatus('🚪 已登出');
+      },
+
+      // 顯示狀態
+      showStatus: function(msg) {
+        var el = document.getElementById('save-status');
+        if (!el) return;
+        el.textContent = msg;
+        el.style.opacity = '1';
+        setTimeout(function() {
+          el.style.transition = 'opacity 1s';
+          el.style.opacity = '0.5';
+        }, 2000);
       }
-    }
-    
-    // ===== Fun Run 滾筒 =====
-    let funRunIndex = 0;
-    let funRunPhotos = [];
-    let funRunInterval;
-    
-    function initFunRunCarousel(photos, hidden = []) {
-      const carousel = document.getElementById('funrun-carousel');
-      funRunPhotos = Object.values(photos);
-      
-      if (funRunPhotos.length === 0) {
-        carousel.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:100px;">暫時未有相片</p>';
+    };
+
+    // =============================================
+    // 未來動向功能
+    // =============================================
+
+    // 初始化未來動向
+    SMG.initUpcoming = function() {
+      this.checkUpcomingExpired();
+      this.restoreUpcomingEvents();
+    };
+
+    // 檢查並隱藏過期動向
+    SMG.checkUpcomingExpired = function() {
+      var now = new Date();
+      var items = document.querySelectorAll('.upcoming-item');
+      items.forEach(function(item) {
+        var dateText = item.querySelector('.upcoming-date');
+        if (dateText) {
+          var dateStr = dateText.textContent.trim();
+          var parts = dateStr.split('.');
+          if (parts.length === 3) {
+            var eventDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            if (eventDate < now) {
+              item.style.display = 'none';
+            }
+          }
+        }
+      });
+    };
+
+    // 恢復已保存的動向（從 IndexedDB）
+    SMG.restoreUpcomingEvents = function() {
+      var self = this;
+      this.dbGetAll(function(allData) {
+        // 收集所有動向 ID
+        var eventIds = {};
+        Object.keys(allData).forEach(function(key) {
+          if (key.startsWith('text_upcoming')) {
+            var match = key.match(/text_upcoming(\d+)-(.+)/);
+            if (match) {
+              var id = match[1];
+              var field = match[2];
+              if (!eventIds[id]) eventIds[id] = {};
+              eventIds[id][field] = allData[key];
+            }
+          }
+        });
+
+        // 對於每個已保存的動向，創建對應的 DOM 元素
+        var list = document.getElementById('upcoming-list');
+        Object.keys(eventIds).forEach(function(id) {
+          var data = eventIds[id];
+          // 檢查是否已存在該動向的 DOM
+          var existingItem = list.querySelector('.upcoming-item[data-upcoming-id="' + id + '"]');
+          if (!existingItem) {
+            // 創建新動向元素
+            var item = document.createElement('div');
+            item.className = 'upcoming-item';
+            item.setAttribute('data-upcoming-id', id);
+            item.setAttribute('data-date', data.date || 'YYYY.MM.DD');
+            item.innerHTML =
+              '<span class="upcoming-date editable" id="upcoming' + id + '-date">' + (data.date || 'YYYY.MM.DD') + '</span>' +
+              '<span class="upcoming-title editable" id="upcoming' + id + '-title">' + (data.title || '🏃 待填寫活動名稱') + '</span>' +
+              '<span class="upcoming-location editable" id="upcoming' + id + '-location">' + (data.location || '📍 待填寫地點') + '</span>' +
+              '<button class="upcoming-delete-btn" onclick="SMG.deleteUpcomingEvent(this)">✕</button>';
+            list.appendChild(item);
+
+            // 綁定編輯功能
+            item.querySelectorAll('.editable').forEach(function(el) {
+              el.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                self.editText(this);
+              });
+            });
+          } else {
+            // 更新現有元素內容
+            if (data.date) {
+              var dateEl = existingItem.querySelector('.upcoming-date');
+              if (dateEl) dateEl.textContent = data.date;
+              existingItem.setAttribute('data-date', data.date);
+            }
+            if (data.title) {
+              var titleEl = existingItem.querySelector('.upcoming-title');
+              if (titleEl) titleEl.textContent = data.title;
+            }
+            if (data.location) {
+              var locationEl = existingItem.querySelector('.upcoming-location');
+              if (locationEl) locationEl.textContent = data.location;
+            }
+          }
+        });
+      });
+    };
+
+    // =============================================
+    // Admin 密碼保護
+    // =============================================
+    SMG.ADMIN_PASSWORD = 'smg2026'; // ← 你可以喺呢度改密碼
+    SMG.isAdmin = false;
+
+    SMG.promptAdminPassword = function() {
+      var self = this;
+
+      // 如果已經係 admin，直接新增
+      if (this.isAdmin) {
+        this.addUpcomingEvent();
         return;
       }
+
+      // 創建密碼輸入框
+      var overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;';
+      overlay.innerHTML =
+        '<div style="background:var(--surface);border:2px solid var(--accent);border-radius:16px;padding:32px;text-align:center;max-width:360px;">' +
+        '<h3 style="color:var(--accent);margin:0 0 20px;font-size:20px;">🔒 管理員驗證</h3>' +
+        '<input type="password" id="admin-password-input" placeholder="請輸入管理員密碼" ' +
+        'style="width:100%;padding:12px 16px;font-size:16px;border:2px solid var(--border);border-radius:8px;' +
+        'background:var(--surface-2);color:#fff;text-align:center;outline:none;box-sizing:border-box;">' +
+        '<p id="admin-error" style="color:#ff4444;font-size:13px;margin:10px 0 0;display:none;">❌ 密碼錯誤，請重試</p>' +
+        '<div style="display:flex;gap:12px;margin-top:20px;">' +
+        '<button onclick="SMG.verifyPassword()" style="flex:1;padding:12px;background:var(--accent);' +
+        'border:none;border-radius:8px;color:#000;font-weight:700;cursor:pointer;font-size:15px;">✓ 確認</button>' +
+        '<button onclick="SMG.closePasswordPrompt()" style="flex:1;padding:12px;background:var(--surface-2);' +
+        'border:1px solid var(--border);border-radius:8px;color:var(--text-muted);cursor:pointer;font-size:15px;">✕ 取消</button>' +
+        '</div></div>';
+      document.body.appendChild(overlay);
+      this.passwordOverlay = overlay;
+
+      // 自動 focus 輸入框
+      var input = document.getElementById('admin-password-input');
+      setTimeout(function() { input.focus(); }, 100);
+
+      // Enter 鍵確認
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') self.verifyPassword();
+        if (e.key === 'Escape') self.closePasswordPrompt();
+      });
+    };
+
+    SMG.verifyPassword = function() {
+      var input = document.getElementById('admin-password-input');
+      var errorMsg = document.getElementById('admin-error');
+      if (input.value === this.ADMIN_PASSWORD) {
+        this.isAdmin = true;
+        this.closePasswordPrompt();
+        this.showStatus('✅ 管理員驗證成功');
+        this.addUpcomingEvent();
+      } else {
+        errorMsg.style.display = 'block';
+        input.value = '';
+        input.focus();
+      }
+    };
+
+    SMG.closePasswordPrompt = function() {
+      if (this.passwordOverlay) {
+        this.passwordOverlay.remove();
+        this.passwordOverlay = null;
+      }
+    };
+
+    // =============================================
+    // 熱血 FUN RUN 相片輪播
+    // =============================================
+    SMG.isFunRunAdmin = false;
+    SMG.funRunEditMode = false;
+    SMG.funRunSortMode = false;
+    SMG.funRunPhotoOrder = [];
+    SMG.funRunPaused = false;
+    SMG.funRunPos = 0;
+    SMG.funRunInterval = null;
+    SMG.funRunSpeed = 120; // 每秒移動嘅像素，約 2.3 秒過一張相片（120px/s ÷ 280px/張 ≈ 2.3s/張）
+
+    // 啟動自動滾動
+    SMG.startFunRunAutoScroll = function() {
+      var self = this;
+      this.stopFunRunAutoScroll();
+
+      this.funRunFrameId = requestAnimationFrame(function animate() {
+        var carousel = document.getElementById('funrun-carousel');
+        if (!carousel) return;
+
+        // 只有當未暫停時，先更新位置
+        if (!self.funRunPaused) {
+          self.funRunPos += self.funRunSpeed / 60; // 60fps
+
+          var maxScroll = carousel.scrollWidth / 2;
+          if (self.funRunPos >= maxScroll) {
+            self.funRunPos = 0;
+          }
+
+          // 確保冇 transition 衝突
+          carousel.style.transition = 'none';
+          carousel.style.transform = 'translateX(-' + self.funRunPos + 'px)';
+        }
+
+        // 無論有冇暫停，都繼續個 loop（咁樣取消暫停時會自動恢復）
+        self.funRunFrameId = requestAnimationFrame(animate);
+      });
+    };
+
+    // 停止自動滾動
+    SMG.stopFunRunAutoScroll = function() {
+      if (this.funRunFrameId) {
+        cancelAnimationFrame(this.funRunFrameId);
+        this.funRunFrameId = null;
+      }
+    };
+
+    SMG.initFunRun = function() {
+      var self = this;
+
+      // 檢查 URL 是否包含 edit=1（兼容舊方法）
+      if (window.location.search.includes('edit=1')) {
+        this.funRunEditMode = true;
+        this.isFunRunAdmin = true;
+        document.getElementById('funrun-edit-controls').style.display = 'block';
+        document.getElementById('funrun-admin-area').style.display = 'none';
+      }
+      // 或者檢查是否已經登入過（sessionStorage）
+      else if (sessionStorage.getItem('funrun_admin') === 'true') {
+        this.funRunEditMode = true;
+        this.isFunRunAdmin = true;
+        document.getElementById('funrun-edit-controls').style.display = 'block';
+        document.getElementById('funrun-admin-area').style.display = 'none';
+      }
+
+      this.loadFunRunPhotos();
+    };
+
+    // 管理員登入
+    SMG.funRunAdminLogin = function() {
+      var password = prompt('請輸入管理員密碼：');
+      if (password === 'smg2026') {
+        this.isFunRunAdmin = true;
+        this.funRunEditMode = true;
+        sessionStorage.setItem('funrun_admin', 'true');
+        document.getElementById('funrun-edit-controls').style.display = 'block';
+        document.getElementById('funrun-admin-area').style.display = 'none';
+        document.getElementById('funrun').setAttribute('data-edit', '1');
+        this.loadFunRunPhotos(); // 重新載入以顯示刪除按鈕
+        this.showStatus('✅ 已進入編輯模式');
+      } else if (password !== null) {
+        alert('密碼錯誤！');
+      }
+    };
+
+    // 管理員登出
+    SMG.funRunAdminLogout = function() {
+      this.isFunRunAdmin = false;
+      this.funRunEditMode = false;
+      sessionStorage.removeItem('funrun_admin');
+      document.getElementById('funrun-edit-controls').style.display = 'none';
+      document.getElementById('funrun-admin-area').style.display = 'block';
+      document.getElementById('funrun').setAttribute('data-edit', '0');
+      this.loadFunRunPhotos(); // 重新載入以隱藏刪除按鈕
+      this.showStatus('已退出編輯模式');
+    };
+
+    SMG.loadFunRunPhotos = function() {
+      var self = this;
+      var carousel = document.getElementById('funrun-carousel');
+      if (!carousel) return;
+
+      // 清空並重新渲染
+      carousel.innerHTML = '';
+
+      // GitHub 預設相片列表
+      var githubPhotos = [
+        'Photo%20from%20%F0%9F%92%96%E2%99%A5%EF%B8%8F%F0%9F%8C%B9%F0%9F%8C%B7%2846%29.jpg',
+        'Photo%20from%20%F0%9F%92%96%E2%99%A5%EF%B8%8F%F0%9F%8C%B9%F0%9F%8C%B7%2847%29.jpg',
+        'Photo%20from%20%F0%9F%92%96%E2%99%A5%EF%B8%8F%F0%9F%8C%B9%F0%9F%8C%B7%2854%29.jpg',
+        'Photo%20from%20%F0%9F%92%96%E2%99%A5%EF%B8%8F%F0%9F%8C%B9%F0%9F%8C%B7%2862%29.jpg',
+        'Photo%20from%20%F0%9F%92%96%E2%99%A5%EF%B8%8F%F0%9F%8C%B9%F0%9F%8C%B7%2863%29.jpg'
+      ];
+      var baseUrl = 'https://raw.githubusercontent.com/Metalrunners/metalrunners-website/main/';
+
+      // 從 IndexedDB 讀取用戶上傳的相片
+      this.dbGetAll(function(allData) {
+        var allPhotosMap = {};
+        var photoId = 0;
+
+        // 加入 GitHub 相片（ID: g_0 到 g_4）
+        githubPhotos.forEach(function(filename) {
+          var id = 'g_' + photoId;
+          allPhotosMap[id] = {
+            id: id,
+            src: baseUrl + filename,
+            source: 'github'
+          };
+          photoId++;
+        });
+
+        // 加入 IndexedDB 相片
+        Object.keys(allData).forEach(function(key) {
+          if (key.startsWith('funrun_photo_db_')) {
+            allPhotosMap[key] = {
+              id: key,
+              src: allData[key],
+              source: 'db'
+            };
+          }
+        });
+
+        // 讀取保存的排序順序
+        var savedOrder = null;
+        if (allData['funrun_photo_order']) {
+          try {
+            savedOrder = JSON.parse(allData['funrun_photo_order']);
+          } catch(e) {
+            savedOrder = null;
+          }
+        }
+
+        // 讀取隱藏的 GitHub 相片列表
+        var hiddenGitHub = [];
+        if (allData['funrun_hidden_github']) {
+          try {
+            hiddenGitHub = JSON.parse(allData['funrun_hidden_github']);
+          } catch(e) {
+            hiddenGitHub = [];
+          }
+        }
+
+        // 按順序排列相片
+        var allPhotos = [];
+        if (savedOrder && savedOrder.length > 0) {
+          // 使用保存的順序
+          savedOrder.forEach(function(id) {
+            if (allPhotosMap[id]) {
+              allPhotos.push(allPhotosMap[id]);
+              delete allPhotosMap[id]; // 移除已加入的
+            }
+          });
+          // 加入剩餘未排序的相片
+          Object.keys(allPhotosMap).forEach(function(id) {
+            if (id !== 'funrun_photo_order' && id !== 'funrun_hidden_github') {
+              allPhotos.push(allPhotosMap[id]);
+            }
+          });
+        } else {
+          // 預設順序：GitHub 相片在前，本地相片在後
+          Object.keys(allPhotosMap).forEach(function(id) {
+            if (id !== 'funrun_photo_order' && id !== 'funrun_hidden_github') {
+              allPhotos.push(allPhotosMap[id]);
+            }
+          });
+        }
+
+        if (allPhotos.length === 0) {
+          carousel.innerHTML = '<p style="color:var(--text-muted);text-align:center;width:100%;">暫時未有相片，請管理員新增 📷</p>';
+          return;
+        }
+
+        // 創建所有相片卡片
+        var visibleCount = 0;
+        allPhotos.forEach(function(photo, index) {
+          // 跳過已隱藏的 GitHub 相片
+          if (photo.source === 'github' && hiddenGitHub.indexOf(photo.id) !== -1) {
+            return;
+          }
+
+          var card = document.createElement('div');
+          card.className = 'funrun-card';
+          card.setAttribute('data-id', photo.id);
+          card.setAttribute('data-source', photo.source);
+
+          var deleteBtn = '';
+          if (self.funRunEditMode) {
+            deleteBtn = '<button class="funrun-delete-btn" onclick="SMG.deleteFunRunPhoto(\'' + photo.id + '\', event)">✕</button>';
+          }
+
+          card.innerHTML =
+            '<img src="' + photo.src + '" alt="Fun Run 相片" loading="lazy" onerror="this.style.display=\'none\'">' +
+            '<div class="funrun-overlay">📷 Fun Run</div>' +
+            deleteBtn;
+          carousel.appendChild(card);
+          visibleCount++;
+        });
+
+        // 為了無限輪播，克隆前半嘅相片加到尾巴
+        var cards = carousel.querySelectorAll('.funrun-card');
+        var cloneCount = Math.min(cards.length, 6);
+        for (var i = 0; i < cloneCount; i++) {
+          var clone = cards[i].cloneNode(true);
+          // 克隆的卡片唔需要刪除按鈕
+          var delBtn = clone.querySelector('.funrun-delete-btn');
+          if (delBtn) delBtn.remove();
+          carousel.appendChild(clone);
+        }
+
+        // 保存 visibleCount 以便後續使用
+        self._funRunVisibleCount = visibleCount;
+
+        // 設置輪播寬度同初始位置
+        carousel.style.transform = 'translateX(0px)';
+        carousel.style.transition = 'none';
+        self.funRunPos = 0;
+
+        // 啟動自動滾動
+        self.startFunRunAutoScroll();
+
+        // 添加懸停暫停功能
+        var wrapper = document.querySelector('.funrun-carousel-wrapper');
+        if (wrapper) {
+          wrapper.addEventListener('mouseenter', function() {
+            self.funRunPaused = true;
+          });
+          wrapper.addEventListener('mouseleave', function() {
+            self.funRunPaused = false;
+          });
+        }
+      });
+    };
+
+    SMG.addFunRunPhoto = function() {
+      if (!this.isAdmin && !this.isFunRunAdmin) {
+        this.promptAdminPasswordForFunRun();
+        return;
+      }
+
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.multiple = true; // 允許選擇多張相片
+      input.onchange = function(e) {
+        var files = e.target.files;
+        if (!files || files.length === 0) return;
+
+        var self2 = SMG;
+        
+        // 先獲取當前最大 ID
+        self2.dbGetAll(function(all) {
+          var maxId = 0;
+          Object.keys(all).forEach(function(key) {
+            if (key.startsWith('funrun_photo_db_')) {
+              var m = key.match(/funrun_photo_db_(\d+)/);
+              if (m) maxId = Math.max(maxId, parseInt(m[1]));
+            }
+          });
+
+          // 處理每一張相片
+          var processed = 0;
+          var totalFiles = files.length;
+
+          function processNextFile(index) {
+            if (index >= totalFiles) {
+              self2.showStatus('✅ 已保存 ' + totalFiles + ' 張相片');
+              self2.loadFunRunPhotos();
+              return;
+            }
+
+            var file = files[index];
+            var reader = new FileReader();
+            reader.onload = function(ev) {
+              // 壓縮圖片
+              var img = new Image();
+              img.onload = function() {
+                var canvas = document.createElement('canvas');
+                var MAX_W = 280;
+                var MAX_H = 280;
+                var w = img.width, h = img.height;
+                if (w > MAX_W) { h = h * MAX_W / w; w = MAX_W; }
+                if (h > MAX_H) { w = w * MAX_H / h; h = MAX_H; }
+                canvas.width = w; canvas.height = h;
+                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                var compressed = canvas.toDataURL('image/jpeg', 0.8);
+
+                maxId++;
+                // 使用 db_ 前綴區分本地相片
+                self2.dbSet('funrun_photo_db_' + maxId, compressed, function() {
+                  processNextFile(index + 1);
+                });
+              };
+              img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+          }
+
+          processNextFile(0);
+        });
+      };
+      input.click();
+    };
+
+    SMG.promptAdminPasswordForFunRun = function() {
+      var self = this;
+      if (this.isAdmin) {
+        this.addFunRunPhoto();
+        return;
+      }
+
+      var overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;';
+      overlay.innerHTML =
+        '<div style="background:var(--surface);border:2px solid var(--accent);border-radius:16px;padding:32px;text-align:center;max-width:360px;">' +
+        '<h3 style="color:var(--accent);margin:0 0 20px;font-size:20px;">🔒 管理員驗證</h3>' +
+        '<input type="password" id="funrun-admin-pwd" placeholder="請輸入管理員密碼" ' +
+        'style="width:100%;padding:12px 16px;font-size:16px;border:2px solid var(--border);border-radius:8px;' +
+        'background:var(--surface-2);color:#fff;text-align:center;outline:none;box-sizing:border-box;">' +
+        '<p id="funrun-admin-error" style="color:#ff4444;font-size:13px;margin:10px 0 0;display:none;">❌ 密碼錯誤，請重試</p>' +
+        '<div style="display:flex;gap:12px;margin-top:20px;">' +
+        '<button onclick="SMG.verifyFunRunPassword()" style="flex:1;padding:12px;background:var(--accent);' +
+        'border:none;border-radius:8px;color:#000;font-weight:700;cursor:pointer;font-size:15px;">✓ 確認</button>' +
+        '<button onclick="SMG.closeFunRunPasswordPrompt()" style="flex:1;padding:12px;background:var(--surface-2);' +
+        'border:1px solid var(--border);border-radius:8px;color:var(--text-muted);cursor:pointer;font-size:15px;">✕ 取消</button>' +
+        '</div></div>';
+      document.body.appendChild(overlay);
+
+      var input = document.getElementById('funrun-admin-pwd');
+      setTimeout(function() { input.focus(); }, 100);
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') self.verifyFunRunPassword();
+        if (e.key === 'Escape') self.closeFunRunPasswordPrompt();
+      });
+    };
+
+    SMG.verifyFunRunPassword = function() {
+      var input = document.getElementById('funrun-admin-pwd');
+      var errorMsg = document.getElementById('funrun-admin-error');
+      if (input.value === this.ADMIN_PASSWORD) {
+        this.isAdmin = true;
+        this.isFunRunAdmin = true;
+        this.closeFunRunPasswordPrompt();
+        this.showStatus('✅ 管理員驗證成功');
+        this.addFunRunPhoto();
+      } else {
+        errorMsg.style.display = 'block';
+        input.value = '';
+        input.focus();
+      }
+    };
+
+    SMG.closeFunRunPasswordPrompt = function() {
+      var overlay = document.querySelector('[style*="z-index:9999"]');
+      if (overlay) overlay.remove();
+    };
+
+    // 删除 Fun Run 相片
+    SMG.deleteFunRunPhoto = function(id, event) {
+      if (event) event.stopPropagation();
+      var self = this;
       
-      renderFunRunCard(0);
-      startFunRunAuto();
-    }
-    
-    function renderFunRunCard(index) {
-      const carousel = document.getElementById('funrun-carousel');
-      const total = funRunPhotos.length;
-      
-      carousel.innerHTML = `
-        <img src="${funRunPhotos[index]}" alt="Fun Run ${index + 1}" style="max-width:100%;max-height:100%;object-fit:contain;">
-      `;
-    }
-    
-    function moveFunRun(dir) {
-      funRunIndex = (funRunIndex + dir + funRunPhotos.length) % funRunPhotos.length;
-      renderFunRunCard(funRunIndex);
-      startFunRunAuto();
-    }
-    
-    function startFunRunAuto() {
-      clearInterval(funRunInterval);
-      funRunInterval = setInterval(() => moveFunRun(1), 3000);
-    }
-    
-    // ===== 活動日誌 =====
-    function initJournal(data) {
-      const journalList = document.getElementById('journal-list');
-      const entries = [];
-      
-      // 收集所有 entry keys
-      for (let i = 1; i <= 50; i++) {
-        const key = `entry${String(i).padStart(3, '0')}`;
-        const title = data[`text_${key}-title`];
-        if (title && !title.includes('待填寫')) {
-          entries.push({
-            key,
-            title,
-            date: data[`text_${key}-date`] || '',
-            location: data[`text_${key}-location`] || '',
-            temp: data[`text_${key}-temp`] || '',
-            weather: data[`text_${key}-weather`] || '',
-            desc: data[`text_${key}-desc`] || '',
-            link: data[`text_${key}-link`] || '',
-            linkText: data[`text_${key}-link-text`] || ''
+      // 檢查是 GitHub 相片還是本地相片
+      if (id.startsWith('g_')) {
+        // GitHub 相片：保存到隱藏列表並重新載入
+        if (!confirm('呢張相片來自 GitHub，只能從顯示中移除。\n確定要移除嗎？')) return;
+        var self2 = this;
+        this.dbGetAll(function(allData) {
+          var hiddenGitHub = [];
+          if (allData['funrun_hidden_github']) {
+            try {
+              hiddenGitHub = JSON.parse(allData['funrun_hidden_github']);
+            } catch(e) {
+              hiddenGitHub = [];
+            }
+          }
+          // 加入到隱藏列表
+          if (hiddenGitHub.indexOf(id) === -1) {
+            hiddenGitHub.push(id);
+          }
+          // 保存到 IndexedDB
+          self2.dbSet('funrun_hidden_github', JSON.stringify(hiddenGitHub), function() {
+            self2.showStatus('✅ 相片已從輪播移除');
+            self2.loadFunRunPhotos();
+          });
+        });
+      } else {
+        // IndexedDB 相片：真正刪除
+        if (!confirm('確定刪除呢張相片？')) return;
+        this.dbDelete(id, function(success) {
+          if (success) {
+            self.showStatus('✅ 相片已刪除');
+            self.loadFunRunPhotos();
+          } else {
+            self.showStatus('❌ 刪除失敗，請重試');
+          }
+        });
+      }
+    };
+
+    // ========== 備份/恢復功能 ==========
+
+    // 導出 Fun Run 相片（只導出本地相片）
+    SMG.exportFunRunPhotos = function() {
+      var self = this;
+      this.dbGetAll(function(allData) {
+        var funrunPhotos = {};
+        Object.keys(allData).forEach(function(key) {
+          if (key.startsWith('funrun_photo_db_')) {
+            funrunPhotos[key] = allData[key];
+          }
+        });
+
+        // 同時保存排序順序
+        funrunPhotos['_funrun_order'] = self.funRunPhotoOrder || [];
+
+        var json = JSON.stringify(funrunPhotos, null, 2);
+        var blob = new Blob([json], { type: 'application/json' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'steel-mag-funrun-backup-' + new Date().toISOString().slice(0,10) + '.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        self.showStatus('✅ 已備份 ' + Object.keys(funrunPhotos).length + ' 項（含排序）');
+      });
+    };
+
+    // 導入 Fun Run 相片
+    SMG.importFunRunPhotos = function(input) {
+      var file = input.files[0];
+      if (!file) return;
+
+      var self = this;
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          var data = JSON.parse(e.target.result);
+          var count = 0;
+          var total = Object.keys(data).length;
+
+          for (var key in data) {
+            self.dbSet(key, data[key], function() {
+              count++;
+              if (count === total) {
+                // 恢復排序順序
+                if (data['_funrun_order']) {
+                  self.funRunPhotoOrder = data['_funrun_order'];
+                  self.dbSet('funrun_photo_order', JSON.stringify(data['_funrun_order']), function() {});
+                }
+                self.showStatus('✅ 已恢復 ' + total + ' 項，頁面將重新整理…');
+                setTimeout(function() { self.loadFunRunPhotos(); }, 800);
+              }
+            });
+          }
+          input.value = '';
+        } catch(err) {
+          alert('❌ 恢復失敗：' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    };
+
+    // ========== 拖曳排序功能 ==========
+
+    // 排序模式開關
+    SMG.toggleFunRunSortMode = function() {
+      var self = this;
+      var carousel = document.getElementById('funrun-carousel');
+      var hint = document.getElementById('funrun-sort-hint');
+      var btn = document.getElementById('funrun-sort-btn');
+
+      if (!this.funRunSortMode) {
+        // 進入排序模式
+        this.funRunSortMode = true;
+        carousel.querySelectorAll('.funrun-card').forEach(function(card) {
+          // 只允許拖曳本地相片（db_ 前綴）
+          if (card.getAttribute('data-id').startsWith('db_')) {
+            card.classList.add('sortable');
+          }
+        });
+        hint.style.display = 'block';
+        btn.textContent = '💾 儲存順序';
+        btn.style.background = 'var(--accent)';
+        btn.style.color = '#000';
+        btn.onclick = function() { self.saveFunRunPhotoOrder(); };
+        this.showStatus('🔄 拖曳相片調整順序');
+      } else {
+        // 已經喺排序模式 - 儲存並退出
+        this.saveFunRunPhotoOrder();
+      }
+    };
+
+    // 儲存排序順序
+    SMG.saveFunRunPhotoOrder = function() {
+      var self = this;
+      var carousel = document.getElementById('funrun-carousel');
+      var cards = carousel.querySelectorAll('.funrun-card[data-id]');
+      var order = [];
+
+      cards.forEach(function(card) {
+        var id = card.getAttribute('data-id');
+        // 只保存本地相片同未移除的 GitHub 相片
+        if (id.startsWith('db_') || (id.startsWith('g_') && card.style.display !== 'none')) {
+          order.push(id);
+        }
+      });
+
+      // 保存到 IndexedDB
+      this.dbSet('funrun_photo_order', JSON.stringify(order), function() {
+        self.funRunPhotoOrder = order;
+        self.showStatus('✅ 排序已儲存');
+        self.exitFunRunSortMode();
+      });
+    };
+
+    // 退出排序模式
+    SMG.exitFunRunSortMode = function() {
+      var self = this;
+      var carousel = document.getElementById('funrun-carousel');
+      var hint = document.getElementById('funrun-sort-hint');
+      var btn = document.getElementById('funrun-sort-btn');
+
+      this.funRunSortMode = false;
+      carousel.querySelectorAll('.funrun-card').forEach(function(card) {
+        card.classList.remove('sortable', 'dragging', 'drag-over');
+      });
+      hint.style.display = 'none';
+      btn.textContent = '🔄 拖曳排序';
+      btn.style.background = 'rgba(255,255,255,0.1)';
+      btn.style.color = 'var(--accent)';
+      btn.onclick = function() { self.toggleFunRunSortMode(); };
+    };
+
+    // 初始化拖曳功能
+    SMG.initFunRunDragDrop = function() {
+      var self = this;
+      var draggedItem = null;
+
+      document.addEventListener('DOMNodeInserted', function() {
+        if (self.funRunSortMode) {
+          var carousel = document.getElementById('funrun-carousel');
+          carousel.querySelectorAll('.funrun-card.sortable').forEach(function(card) {
+            if (!card.hasDragListeners) {
+              card.hasDragListeners = true;
+
+              card.addEventListener('mousedown', function(e) {
+                if (e.button !== 0) return;
+                draggedItem = card;
+                card.classList.add('dragging');
+                e.preventDefault();
+              });
+            }
+          });
+        }
+      }, true);
+
+      document.addEventListener('mouseup', function(e) {
+        if (draggedItem) {
+          draggedItem.classList.remove('dragging');
+          draggedItem = null;
+        }
+      });
+
+      document.addEventListener('mousemove', function(e) {
+        if (!draggedItem) return;
+        var carousel = document.getElementById('funrun-carousel');
+        var cards = Array.from(carousel.querySelectorAll('.funrun-card:not(.dragging)'));
+
+        cards.forEach(function(card) {
+          var rect = card.getBoundingClientRect();
+          if (e.clientX > rect.left && e.clientX < rect.right &&
+              e.clientY > rect.top && e.clientY < rect.bottom) {
+            card.classList.add('drag-over');
+            // 交換位置
+            var draggedIdx = Array.from(carousel.children).indexOf(draggedItem);
+            var targetIdx = Array.from(carousel.children).indexOf(card);
+            if (draggedIdx !== targetIdx) {
+              if (draggedIdx < targetIdx) {
+                carousel.insertBefore(draggedItem, card.nextSibling);
+              } else {
+                carousel.insertBefore(draggedItem, card);
+              }
+            }
+          } else {
+            card.classList.remove('drag-over');
+          }
+        });
+      });
+    };
+
+    // 清理舊的 orphan 資料（同「清除所有本地相片」功能）
+    SMG.clearAllFunRunPhotos = function() {
+      if (!confirm('⚠️ 確定要清除所有本地相片嗎？\n呢個操作唔可以撤消！')) return;
+      var self = this;
+      this.dbGetAll(function(allData) {
+        var count = 0;
+        var total = 0;
+        Object.keys(allData).forEach(function(key) {
+          if (key.startsWith('funrun_photo_db_')) {
+            total++;
+            self.dbDelete(key, function() {
+              count++;
+              if (count === total) {
+                self.dbDelete('funrun_photo_order', function() {
+                  self.showStatus('✅ 已清除 ' + total + ' 張相片');
+                  self.loadFunRunPhotos();
+                });
+              }
+            });
+          }
+        });
+        if (total === 0) {
+          self.showStatus('✅ 冇本地相片需要清除');
+        }
+      });
+    };
+
+    // 清除已移除的 GitHub 相片殘留（重置顯示）
+        // 診斷 IndexedDB 數據
+    SMG.diagnoseFunRunPhotos = function() {
+      var self = this;
+      this.dbGetAll(function(allData) {
+        var keys = Object.keys(allData);
+        var photoKeys = keys.filter(function(k) { return k.startsWith('funrun_photo_db_'); });
+        var orderKeys = keys.filter(function(k) { return k === 'funrun_photo_order'; });
+        var hiddenKeys = keys.filter(function(k) { return k === 'funrun_hidden_github'; });
+        var otherKeys = keys.filter(function(k) {
+          return !k.startsWith('funrun_photo_db_') && k !== 'funrun_photo_order' && k !== 'funrun_hidden_github';
+        });
+
+        var msg = '🔍 IndexedDB 診斷結果：\n\n';
+        msg += '📷 本地相片數量：' + photoKeys.length + '\n';
+        if (photoKeys.length > 0) {
+          msg += '   相片 keys：' + photoKeys.join(', ') + '\n';
+        }
+        msg += '📋 排序記錄：' + (orderKeys.length > 0 ? '有 ✅' : '無 ❌') + '\n';
+        msg += '👁️ 隱藏記錄：' + (hiddenKeys.length > 0 ? '有 ✅' : '無 ❌') + '\n';
+        if (otherKeys.length > 0) {
+          msg += '⚠️ 其他 keys：' + otherKeys.join(', ') + '\n';
+        }
+        msg += '\n💡 如果「本地相片數量」係 0，\n表示之前上傳嘅相片可能用咗唔同嘅儲存方式。';
+        alert(msg);
+      });
+    };
+SMG.resetHiddenGitHubPhotos = function() {
+      this.dbSet('funrun_hidden_github', JSON.stringify([]), function() {
+        SMG.showStatus('✅ 已重置 GitHub 相片顯示');
+        SMG.loadFunRunPhotos();
+      });
+    };
+
+    // 左右箭嘴控制
+    SMG.moveFunRun = function(dir) {
+      var carousel = document.getElementById('funrun-carousel');
+      if (!carousel) return;
+
+      // 暫停自動輪播嘅位置更新
+      SMG.funRunPaused = true;
+      carousel.style.transition = 'transform 0.5s ease';
+
+      // 計算滑動距離
+      var cardW = 280 + 20; // 卡片寬度 + gap
+      SMG.funRunPos += dir * cardW;
+
+      var maxScroll = carousel.scrollWidth / 2;
+      if (SMG.funRunPos < 0) SMG.funRunPos = maxScroll - cardW;
+      if (SMG.funRunPos > maxScroll - cardW) SMG.funRunPos = 0;
+
+      // 手動移動到新位置
+      carousel.style.transform = 'translateX(-' + SMG.funRunPos + 'px)';
+
+      // Transition 完結後，恢復自動輪播
+      setTimeout(function() {
+        SMG.funRunPaused = false;
+        carousel.style.transition = 'none';
+      }, 500);
+    };
+
+    // 新增未來動向
+    SMG.addUpcomingEvent = function() {
+      var list = document.getElementById('upcoming-list');
+      var count = list.querySelectorAll('.upcoming-item').length + 1;
+      var id = count;
+
+      // 確保 ID 唯一（檢查 data-upcoming-id 和 DOM ID）
+      var existingIds = [];
+      list.querySelectorAll('.upcoming-item').forEach(function(item) {
+        var attrId = item.getAttribute('data-upcoming-id');
+        if (attrId) existingIds.push(parseInt(attrId));
+        var dateEl = item.querySelector('.upcoming-date');
+        if (dateEl) {
+          var match = dateEl.id.match(/upcoming(\d+)-/);
+          if (match) existingIds.push(parseInt(match[1]));
+        }
+      });
+      while (existingIds.includes(id)) { id++; }
+
+      var item = document.createElement('div');
+      item.className = 'upcoming-item';
+      item.setAttribute('data-upcoming-id', id);
+      item.setAttribute('data-date', 'YYYY.MM.DD');
+      item.innerHTML =
+        '<span class="upcoming-date editable" id="upcoming' + id + '-date">YYYY.MM.DD</span>' +
+        '<span class="upcoming-title editable" id="upcoming' + id + '-title">🏃 待填寫活動名稱</span>' +
+        '<span class="upcoming-location editable" id="upcoming' + id + '-location">📍 待填寫地點</span>' +
+        '<button class="upcoming-delete-btn" onclick="SMG.deleteUpcomingEvent(this)">✕</button>';
+
+      list.appendChild(item);
+
+      // 綁定編輯功能
+      var self = this;
+      item.querySelectorAll('.editable').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          self.editText(this);
+        });
+      });
+
+      // 保存新增的動向結構（使用統一的 text_ 前綴格式）
+      this.dbSet('text_upcoming' + id + '-date', 'YYYY.MM.DD', function() {});
+      this.dbSet('text_upcoming' + id + '-title', '🏃 待填寫活動名稱', function() {});
+      this.dbSet('text_upcoming' + id + '-location', '📍 待填寫地點', function() {});
+      this.showStatus('✅ 新增動向已保存');
+    };
+
+    // 刪除未來動向
+    SMG.deleteUpcomingEvent = function(btn) {
+      var item = btn.closest('.upcoming-item');
+      if (!item) return;
+
+      // 從 IndexedDB 刪除
+      var dateEl = item.querySelector('.upcoming-date');
+      if (dateEl) {
+        var match = dateEl.id.match(/upcoming(\d+)-/);
+        if (match) {
+          var id = match[1];
+          this.dbGetAll(function(allData) {
+            var keys = Object.keys(allData).filter(function(k) { return k.startsWith('upcoming_' + id + '_'); });
+            // 簡化：直接隱藏，保留在 DOM 中
           });
         }
       }
-      
-      // 渲染
-      entries.forEach(entry => {
-        const card = document.createElement('div');
-        card.className = 'journal-card';
-        card.innerHTML = `
-          <div class="journal-header">
-            <div class="journal-title">${entry.title}</div>
-            <div class="journal-meta">
-              ${entry.weather ? `<span>${entry.weather}</span>` : ''}
-              ${entry.temp ? `<span>${entry.temp}</span>` : ''}
-              ${entry.date ? `<span>${entry.date}</span>` : ''}
-            </div>
-          </div>
-          <div class="journal-meta" style="margin-bottom:12px;">
-            ${entry.location ? `<span>${entry.location}</span>` : ''}
-          </div>
-          <p class="journal-desc">${entry.desc}</p>
-          ${entry.linkText ? `<a href="${entry.link}" target="_blank" style="color:var(--accent);margin-top:12px;display:inline-block;">${entry.linkText}</a>` : ''}
-        `;
-        journalList.appendChild(card);
+
+      // 從 DOM 移除
+      item.style.transition = 'opacity 0.3s, transform 0.3s';
+      item.style.opacity = '0';
+      item.style.transform = 'translateX(-20px)';
+      setTimeout(function() {
+        item.remove();
+      }, 300);
+    };
+
+    // 保存未來動向到 IndexedDB（重寫 editText 的保存邏輯）
+    var originalEditText = SMG.editText;
+    SMG.editText = function(el) {
+      var self = this;
+      var originalText = el.innerText || el.textContent || '';
+
+      // 調用原來的編輯邏輯
+      if (el.querySelector('input')) return;
+      if (!el.id) return;
+
+      el.classList.add('editing');
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.value = originalText;
+      input.style.cssText = 'font:inherit;letter-spacing:inherit;background:rgba(245,166,35,0.25);border:3px solid #f5a623;border-radius:8px;padding:6px 10px;color:#fff;width:80%;outline:none;font-size:inherit;font-weight:inherit;text-align:inherit;';
+
+      input.addEventListener('click', function(e) { e.stopPropagation(); });
+      input.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+
+      var finish = function() {
+        el.classList.remove('editing');
+        var newText = input.value.trim() || originalText;
+        el.innerHTML = newText;
+
+        // 保存到 IndexedDB
+        var key = 'text_' + el.id;
+        self.dbSet(key, newText, function(success) {
+          if (success) self.showStatus('✅ 已保存');
+
+          // 如果是未來動向的日期欄位，更新 data-date 並檢查是否過期
+          if (el.classList.contains('upcoming-date')) {
+            var item = el.closest('.upcoming-item');
+            if (item) {
+              item.setAttribute('data-date', newText);
+              // 檢查是否已過期
+              var parts = newText.split('.');
+              if (parts.length === 3) {
+                var eventDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                var now = new Date();
+                now.setHours(0, 0, 0, 0);
+                if (eventDate < now) {
+                  item.style.display = 'none';
+                  self.showStatus('⚠️ 動向已過期');
+                } else {
+                  item.style.display = '';
+                }
+              }
+            }
+          }
+        });
+      };
+
+      input.addEventListener('blur', function() { setTimeout(finish, 100); });
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+        if (e.key === 'Escape') {
+          el.classList.remove('editing');
+          el.innerHTML = originalText;
+        }
       });
-      
-      if (entries.length === 0) {
-        journalList.innerHTML = '<p style="color:var(--text-muted);">暫時未有活動記錄</p>';
+
+      el.innerHTML = '';
+      el.appendChild(input);
+      setTimeout(function() { input.focus(); input.select(); }, 50);
+    };
+
+    // =============================================
+    // 跳轉至指定月份的日誌
+    function jumpToEntry() {
+      var yearPicker = document.getElementById('journal-year-picker');
+      var monthPicker = document.getElementById('journal-month-picker');
+      var targetYear = yearPicker.value;
+      var targetMonth = monthPicker.value;
+      var formattedMonth = targetYear + '.' + targetMonth;
+      var entries = document.querySelectorAll('.journal-entry');
+      for (var i = 0; i < entries.length; i++) {
+        var dateEl = entries[i].querySelector('.entry-date');
+        if (dateEl && dateEl.textContent.includes(formattedMonth)) {
+          entries[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
       }
+      alert('找不到 ' + formattedMonth + ' 的日誌');
     }
-    
-    // ===== 啟動 =====
-    loadData();
+
+    // DOM 載入後初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      SMG.init();
+    });
+
+    // 浮動按鈕組顯示/隱藏
+    window.addEventListener('scroll', function() {
+      var group = document.getElementById('float-btn-group');
+      if (window.scrollY > 300) {
+        group.style.display = 'flex';
+      } else {
+        group.style.display = 'none';
+      }
+    });
   </script>
+
 </body>
 </html>
+

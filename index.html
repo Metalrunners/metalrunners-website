@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
@@ -1334,6 +1334,7 @@
         <button class="funrun-restore-btn" onclick="document.getElementById('funrun-restore-file').click()" style="padding:10px 24px;background:rgba(255,152,0,0.15);border:1px solid #FF9800;color:#FF9800;border-radius:8px;cursor:pointer;margin-right:10px;">📤 恢復</button>
         <button class="funrun-reset-github-btn" onclick="SMG.resetHiddenGitHubPhotos()" style="padding:10px 18px;background:rgba(156,39,176,0.15);border:1px solid #9C27B0;color:#9C27B0;border-radius:8px;cursor:pointer;margin-right:10px;font-size:13px;" title="重新顯示所有 GitHub 相片">🔄 重置 GitHub</button>
         <button class="funrun-clear-btn" onclick="SMG.clearAllFunRunPhotos()" style="padding:10px 18px;background:rgba(255,0,0,0.15);border:1px solid #ff4444;color:#ff4444;border-radius:8px;cursor:pointer;margin-right:10px;font-size:13px;" title="清除所有本地相片">🗑️ 清除本地</button>
+        <button class="funrun-diagnose-btn" onclick="SMG.diagnoseFunRunPhotos()" style="padding:10px 18px;background:rgba(0,150,136,0.15);border:1px solid #009688;color:#009688;border-radius:8px;cursor:pointer;margin-right:10px;font-size:13px;" title="診斷 IndexedDB 數據">🔍 診斷</button>
         <input type="file" id="funrun-restore-file" accept=".json" style="display:none" onchange="SMG.importFunRunPhotos(this)">
         <button class="funrun-logout-btn" id="funrun-logout-btn" onclick="SMG.funRunAdminLogout()" style="padding:10px 24px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--text);border-radius:8px;cursor:pointer;">登出</button>
       </div>
@@ -3592,7 +3593,33 @@
     };
 
     // 清除已移除的 GitHub 相片殘留（重置顯示）
-    SMG.resetHiddenGitHubPhotos = function() {
+        // 診斷 IndexedDB 數據
+    SMG.diagnoseFunRunPhotos = function() {
+      var self = this;
+      this.dbGetAll(function(allData) {
+        var keys = Object.keys(allData);
+        var photoKeys = keys.filter(function(k) { return k.startsWith('funrun_photo_db_'); });
+        var orderKeys = keys.filter(function(k) { return k === 'funrun_photo_order'; });
+        var hiddenKeys = keys.filter(function(k) { return k === 'funrun_hidden_github'; });
+        var otherKeys = keys.filter(function(k) {
+          return !k.startsWith('funrun_photo_db_') && k !== 'funrun_photo_order' && k !== 'funrun_hidden_github';
+        });
+
+        var msg = '🔍 IndexedDB 診斷結果：\n\n';
+        msg += '📷 本地相片數量：' + photoKeys.length + '\n';
+        if (photoKeys.length > 0) {
+          msg += '   相片 keys：' + photoKeys.join(', ') + '\n';
+        }
+        msg += '📋 排序記錄：' + (orderKeys.length > 0 ? '有 ✅' : '無 ❌') + '\n';
+        msg += '👁️ 隱藏記錄：' + (hiddenKeys.length > 0 ? '有 ✅' : '無 ❌') + '\n';
+        if (otherKeys.length > 0) {
+          msg += '⚠️ 其他 keys：' + otherKeys.join(', ') + '\n';
+        }
+        msg += '\n💡 如果「本地相片數量」係 0，\n表示之前上傳嘅相片可能用咗唔同嘅儲存方式。';
+        alert(msg);
+      });
+    };
+SMG.resetHiddenGitHubPhotos = function() {
       this.dbSet('funrun_hidden_github', JSON.stringify([]), function() {
         SMG.showStatus('✅ 已重置 GitHub 相片顯示');
         SMG.loadFunRunPhotos();
@@ -3804,3 +3831,4 @@
 
 </body>
 </html>
+
